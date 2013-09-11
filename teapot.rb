@@ -48,17 +48,16 @@ end
 define_configuration "dream-imaging" do |configuration|
 	configuration.public!
 	
-	configuration.import! "dream"
-	
+	configuration.require "dream"
 	configuration.require "png"
 	configuration.require "jpeg"
 end
 
 define_configuration "travis" do |configuration|
 	configuration[:source] = "https://github.com/dream-framework"
-
-	configuration.import! "platforms"
+	
+	configuration.require "platforms"
 	configuration.import "dream-imaging"
-
+	
 	configuration[:run] = ["Test/Dream/Imaging"]
 end
