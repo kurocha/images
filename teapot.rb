@@ -45,7 +45,7 @@ define_target "dream-imaging-tests" do |target|
 	target.provides "Test/Dream/Imaging"
 end
 
-define_configuration "dream-imaging" do |configuration|
+define_configuration "travis" do |configuration|
 	configuration[:source] = "https://github.com/dream-framework"
 
 	configuration.import! "dream"
