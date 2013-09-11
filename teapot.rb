@@ -53,4 +53,6 @@ define_configuration "travis" do |configuration|
 	
 	configuration.require "png"
 	configuration.require "jpeg"
+	
+	configuration[:run] = ["Test/Dream/Imaging"]
 end
