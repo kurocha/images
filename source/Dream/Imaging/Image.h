@@ -45,7 +45,8 @@ namespace Dream {
 			virtual const PixelLayout & layout () const;
 			virtual const ByteT * data () const;
 
-			const Buffer & buffer () const { return _buffer; }
+			const MutableBuffer & buffer () const { return _buffer; }
+			MutableBuffer & buffer () { return _buffer; }
 			ByteT * data () { return _buffer.begin(); }
 
 			const Vec2u & size() const { return _size; }
