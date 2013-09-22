@@ -294,7 +294,7 @@ namespace Dream {
 
 			t.pause();
 
-			logger()->log(LOG_INFO, LogBuffer() << "*** Total time to load " << count << " images: " << t.time() << "s");
+			//logger()->log(LOG_INFO, LogBuffer() << "*** Total time to load " << count << " images: " << t.time() << "s");
 
 			return loaded_image;
 		}
