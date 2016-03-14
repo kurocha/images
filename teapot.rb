@@ -44,7 +44,7 @@ define_target "dream-imaging-tests" do |target|
 	target.depends "Library/DreamImaging"
 	target.depends "Library/UnitTest"
 	
-	target.provides "Test/Dream/Imaging"
+	target.provides "Test/DreamImaging"
 end
 
 define_configuration "dream-imaging" do |configuration|
