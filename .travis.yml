@@ -8,6 +8,6 @@ install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get -qq update
   - sudo apt-get -qq install libstdc++-4.8-dev
-# ruby 2.0 and teapot
-  - rvm use 2.0 --install --binary --fuzzy
+# ruby 2.3 and teapot
+  - rvm use 2.3 --install --binary --fuzzy
   - bundle install
