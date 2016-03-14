@@ -7,7 +7,7 @@
 //
 //
 
-#include "PixelBuffer.h"
+#include "PixelBuffer.hpp"
 
 #include <iostream>
 #include <unistd.h>

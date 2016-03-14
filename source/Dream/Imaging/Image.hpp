@@ -7,24 +7,29 @@
 //
 //
 
-#ifndef _DREAM_IMAGING_IMAGE_H
-#define _DREAM_IMAGING_IMAGE_H
+#pragma once
 
-#include "PixelBuffer.h"
+#include "PixelBuffer.hpp"
 
-#include <Dream/Resources/Loader.h>
+#include <Dream/Resources/Loader.hpp>
 
-#include <Euclid/Numerics/Vector.IO.h>
+#include <Euclid/Numerics/Vector.IO.hpp>
 
 namespace Dream {
 	namespace Imaging {
 		using namespace Resources;
 		using namespace Euclid::Numerics;
-
+		
+		enum class ImageType {
+			UNKNOWN, JPEG, PNG
+		};
+		
+		ImageType read_image_type(const Buffer & buffer);
+		
 		// This class represents your typical 2-dimentional uncompressed image.
-		class Image : public Object, implements IPixelBuffer {
+		class Image : public Object, virtual public IPixelBuffer {
 		public:
-			class Loader : public Object, implements ILoadable {
+			class Loader : public Object, virtual public ILoadable {
 			public:
 				virtual void register_loader_types (ILoader * loader);
 				virtual Ref<Object> load_from_data (const Ptr<IData> data, const ILoader * loader);
@@ -152,5 +157,3 @@ namespace Dream {
 		}
 	}
 }
-
-#endif

@@ -7,8 +7,8 @@
 //
 //
 
-#include "Image.h"
-#include <Dream/Events/Logger.h>
+#include "Image.hpp"
+#include <Dream/Core/Logger.hpp>
 
 #include <stdexcept>
 
@@ -21,7 +21,7 @@ namespace Dream
 {
 	namespace Imaging
 	{
-		using namespace Events::Logging;
+		using namespace Core::Logging;
 
 		static void png_write_to_buffer (png_structp png_writer, png_bytep data, png_size_t length)
 		{
@@ -101,7 +101,7 @@ namespace Dream
 				// After you are finished writing the image, you should finish writing the file.
 				png_write_end(png_writer, NULL);
 			} catch (std::exception & e) {
-				logger()->log(LOG_ERROR, LogBuffer() << "PNG write error: " << e.what());
+				log_error("PNG write error: ", e.what());
 
 				if (png_writer)
 					png_destroy_write_struct(&png_writer, &png_info);

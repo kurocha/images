@@ -1,8 +1,8 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Dream/Imaging/Image.h>
-#include <Euclid/Numerics/Vector.IO.h>
+#include <Dream/Imaging/Image.hpp>
+#include <Euclid/Numerics/Vector.IO.hpp>
 
 #include <cstring>
 

@@ -7,15 +7,14 @@
 //
 //
 
-#ifndef _DREAM_IMAGING_PIXELBUFFER_H
-#define _DREAM_IMAGING_PIXELBUFFER_H
+#pragma once
 
-#include <Dream/Framework.h>
+#include <Dream/Framework.hpp>
 
-#include <Dream/Core/Algorithm.h>
-#include <Dream/Core/Buffer.h>
+#include <Dream/Core/Algorithm.hpp>
+#include <Dream/Core/Buffer.hpp>
 
-#include <Euclid/Numerics/Vector.h>
+#include <Euclid/Numerics/Vector.hpp>
 
 namespace Dream {
 	namespace Imaging {
@@ -66,7 +65,7 @@ namespace Dream {
 		};
 
 		// A pixel buffer is a container for pixel data along with a layout that allows for interpretation of the buffer contents. This typically includes a pixel format which describes the layout of colour channels within an individual pixel element, a data type which describes the storage for each pixel component and a size which describes the organisation of pixel data into rows and columns and potentially other dimensions.
-		class IPixelBuffer : implements IObject {
+		class IPixelBuffer : virtual public IObject {
 		public:
 			virtual ~IPixelBuffer();
 
@@ -76,7 +75,7 @@ namespace Dream {
 
 		using Core::Buffer;
 
-		class PixelBuffer : implements IPixelBuffer {
+		class PixelBuffer : virtual public IPixelBuffer {
 		protected:
 			PixelLayout _pixel_layout;
 			Shared<Buffer> _buffer;
@@ -90,5 +89,3 @@ namespace Dream {
 		};
 	}
 }
-
-#endif

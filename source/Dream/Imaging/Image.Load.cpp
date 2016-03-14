@@ -7,11 +7,11 @@
 //
 //
 
-#include "Image.h"
+#include "Image.hpp"
 
-#include <Dream/Core/Data.h>
-#include <Dream/Core/Timer.h>
-#include <Dream/Events/Logger.h>
+#include <Dream/Core/Data.hpp>
+#include <Dream/Core/Timer.hpp>
+#include <Dream/Core/Logger.hpp>
 
 extern "C" {
 #include <png.h>
@@ -24,7 +24,7 @@ extern "C" {
 
 namespace Dream {
 	namespace Imaging {
-		using namespace Events::Logging;
+		using namespace Core::Logging;
 
 		struct DataFile {
 			Shared<Buffer> buffer;
@@ -59,7 +59,7 @@ namespace Dream {
 			cinfo->src->next_input_byte = eoi;
 			cinfo->src->bytes_in_buffer = 2;
 
-			return false;
+			return (boolean)0;
 		}
 
 		/*
@@ -173,7 +173,7 @@ namespace Dream {
 			png_byte **ppb_row_pointers = NULL;
 
 			if (!png_check_sig((png_byte*)buffer->begin(), 8)) {
-				logger()->log(LOG_ERROR, "Could not verify PNG image!");
+				log_error("Could not verify PNG image!");
 				return Ref<Image>();
 			}
 
@@ -251,7 +251,7 @@ namespace Dream {
 
 				if (png_reader) png_destroy_read_struct(&png_reader, &png_info, NULL);
 			} catch (std::exception &e) {
-				logger()->log(LOG_ERROR, LogBuffer() << "PNG read error: " << e.what());
+				log_error("PNG read error: ", e.what());
 
 				if (png_reader) png_destroy_read_struct(&png_reader, &png_info, NULL);
 
@@ -269,34 +269,20 @@ namespace Dream {
 // MARK: Loader Multiplexer
 
 		Ref<Image> Image::load_from_data (const Ptr<IData> data) {
-			static Stopwatch t;
-			static unsigned count = 0; ++count;
-
 			Ref<Image> loaded_image;
-			Shared<Buffer> buffer;
 
-			t.start();
-
-			buffer = data->buffer();
-
-			switch (buffer->mimetype()) {
-			case IMAGE_JPEG:
-				loaded_image = load_jpeg_image(data);
-				break;
-			case IMAGE_PNG:
-				loaded_image = load_png_image(data);
-				break;
-			//case Data::IMAGE_DDS:
-			//	loaded_image = load_ddsimage(data);
+			auto buffer = data->buffer();
+			auto image_type = read_image_type(*buffer);
+			
+			switch (image_type) {
+			case ImageType::JPEG:
+				return load_jpeg_image(data);
+			case ImageType::PNG:
+				return load_png_image(data);
 			default:
-				logger()->log(LOG_ERROR, "Could not load image: Unsupported image format.");
+				log_error("Could not load image: Unsupported image format.");
+				return nullptr;
 			}
-
-			t.pause();
-
-			//logger()->log(LOG_INFO, LogBuffer() << "*** Total time to load " << count << " images: " << t.time() << "s");
-
-			return loaded_image;
 		}
 	}
 }

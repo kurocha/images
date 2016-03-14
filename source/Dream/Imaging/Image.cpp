@@ -7,11 +7,38 @@
 //
 //
 
-#include "Image.h"
+#include "Image.hpp"
 #include <cassert>
 
 namespace Dream {
 	namespace Imaging {
+		/* From MacOS X mime.magic:
+			# JPEG images
+			0	beshort		0xffd8		image/jpeg
+
+			#PNG Image Format
+			0	string		\x89PNG			image/png
+
+			# PC bitmaps (OS/2, Windoze BMP files)  (Greg Roelofs, newt@uchicago.edu)
+			0	string		BM		image/bmp
+
+			# TIFF and friends
+			#					TIFF file, big-endian
+			0	string		MM		image/tiff
+			#					TIFF file, little-endian
+			0	string		II		image/tiff
+		*/
+		
+		ImageType read_image_type(const Buffer & buffer) {
+			if (buffer.size() < 4) return ImageType::UNKNOWN;
+			
+			if (buffer[0] == 0xFF && buffer[1] == 0xD8)
+				return ImageType::JPEG;
+			
+			if (buffer[0] == 89 && buffer[1] == 'P' and buffer[2] == 'N' and buffer[3] == 'G')
+				return ImageType::PNG;
+		}
+		
 		void Image::Loader::register_loader_types (ILoader * loader)
 		{
 			loader->set_loader_for_extension(this, "jpg");
