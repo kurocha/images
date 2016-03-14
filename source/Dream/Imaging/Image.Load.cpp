@@ -21,6 +21,7 @@ extern "C" {
 #include <exception>
 #include <stdexcept>
 #include <sstream>
+#include <cstring>
 
 namespace Dream {
 	namespace Imaging {
@@ -43,7 +44,7 @@ namespace Dream {
 
 			static void png_read_data (png_structp png_reader, png_bytep data, png_size_t length) {
 				DataFile *data_file = (DataFile *) png_get_io_ptr (png_reader);
-				memcpy(data, data_file->read_bytes(length), length);
+				std::memcpy(data, data_file->read_bytes(length), length);
 			}
 		};
 

@@ -32,7 +32,7 @@ define_target "dream-imaging" do |target|
 	target.depends "Library/Euclid"
 	
 	target.provides "Library/DreamImaging" do
-		append linkflags "-lDreamImaging"
+		append linkflags {install_prefix + "lib/libDreamImaging.a"}
 	end
 end
 

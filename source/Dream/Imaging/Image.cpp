@@ -37,6 +37,8 @@ namespace Dream {
 			
 			if (buffer[0] == 89 && buffer[1] == 'P' and buffer[2] == 'N' and buffer[3] == 'G')
 				return ImageType::PNG;
+			
+			return ImageType::UNKNOWN;
 		}
 		
 		void Image::Loader::register_loader_types (ILoader * loader)
