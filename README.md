@@ -8,6 +8,18 @@ For more details please see the main [project page][1].
 
 [![Build Status](https://secure.travis-ci.org/dream-framework/dream-imaging.png)](http://travis-ci.org/dream-framework/dream-imaging)
 
+## Usage
+
+`Dream::Imaging` provides a few useful classes for dealing with pixel data: `Dream::Imaging::PixelBuffer` which has an associated `Dream::Imaging::PixelLayout`, and `Dream::Imaging::Image` represents a typical 2D image.
+
+`Dream::Imaging::Image` can be loaded by `Dream::Resources::Loader`, but can also be loaded and saved directly:
+
+```c++
+auto input_data = ref(new Dream::Core::LocalFileData(path));
+auto image = Image::load_from_data(input_data);
+auto output_data = Image::save_to_data(image);
+```
+
 ## Contributing
 
 1. Fork it

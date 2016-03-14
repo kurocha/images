@@ -60,7 +60,10 @@ namespace Dream {
 
 			void fill(ByteT value = 0);
 
+			// Reads an image from either PNG or JPEG data:
 			static Ref<Image> load_from_data (const Ptr<IData> data);
+			
+			// Writes an image out as a PNG:
 			static Ref<IData> save_to_data (const Ptr<Image> image);
 		};
 
