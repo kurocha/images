@@ -6,7 +6,7 @@ For more details please see the main [project page][1].
 
 [1]: http://www.codeotaku.com/projects/dream/index
 
-[![Build Status](https://secure.travis-ci.org/dream-framework/dream-imaging.png)](http://travis-ci.org/dream-framework/dream-imaging)
+[![Build Status](https://secure.travis-ci.org/kurocha/dream-imaging.svg)](http://travis-ci.org/kurocha/dream-imaging)
 
 ## Usage
 
