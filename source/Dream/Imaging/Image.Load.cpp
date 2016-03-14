@@ -98,7 +98,7 @@ namespace Dream {
 
 		static Ref<Image> load_jpeg_image (const Ptr<IData> data) {
 			jpeg_decompress_struct cinfo;
-			jpeg_error_mgr jerr;
+			jpeg_error_mgr jerr = {0};
 
 			Ref<Image> result_image;
 			DataType data_type = DataType::BYTE;
@@ -108,9 +108,6 @@ namespace Dream {
 			unsigned width, height;
 
 			try {
-				//memset (&cinfo, 0, sizeof (cinfo));
-				memset (&jerr, 0, sizeof (jerr));
-
 				cinfo.err = jpeg_std_error(&jerr);
 
 				jpeg_create_decompress(&cinfo);
