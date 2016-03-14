@@ -1,10 +1,6 @@
 # Dream Imaging
 
-Dream Imaging is a sub-module providing image loading, saving and manipulation.
-
-For more details please see the main [project page][1].
-
-[1]: http://www.codeotaku.com/projects/dream/index
+Dream Imaging provides image loading, saving and manipulation.
 
 [![Build Status](https://secure.travis-ci.org/kurocha/dream-imaging.svg)](http://travis-ci.org/kurocha/dream-imaging)
 
