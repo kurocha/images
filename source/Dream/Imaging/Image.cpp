@@ -35,7 +35,7 @@ namespace Dream {
 			if (buffer[0] == 0xFF && buffer[1] == 0xD8)
 				return ImageType::JPEG;
 			
-			if (buffer[0] == 89 && buffer[1] == 'P' and buffer[2] == 'N' and buffer[3] == 'G')
+			if (buffer[0] == 137 && buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G')
 				return ImageType::PNG;
 			
 			return ImageType::UNKNOWN;
