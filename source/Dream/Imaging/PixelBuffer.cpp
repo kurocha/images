@@ -49,7 +49,7 @@ namespace Dream {
 			return _pixel_layout;
 		}
 
-		const ByteT * PixelBuffer::data () const
+		const Byte * PixelBuffer::data () const
 		{
 			return _buffer->begin();
 		}

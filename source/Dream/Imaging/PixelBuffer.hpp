@@ -70,7 +70,7 @@ namespace Dream {
 			virtual ~IPixelBuffer();
 
 			virtual const PixelLayout & layout () const = 0;
-			virtual const ByteT * data () const = 0;
+			virtual const Byte * data () const = 0;
 		};
 
 		using Core::Buffer;
@@ -85,7 +85,7 @@ namespace Dream {
 			virtual ~PixelBuffer();
 
 			virtual const PixelLayout & layout () const;
-			virtual const ByteT * data () const;
+			virtual const Byte * data () const;
 		};
 	}
 }

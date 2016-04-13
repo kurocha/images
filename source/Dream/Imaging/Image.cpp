@@ -66,7 +66,7 @@ namespace Dream {
 			return _layout;
 		}
 
-		const ByteT * Image::data () const
+		const Byte * Image::data () const
 		{
 			return _buffer.begin();
 		}
@@ -88,7 +88,7 @@ namespace Dream {
 				allocate();
 		}
 
-		void Image::fill(ByteT value)
+		void Image::fill(Byte value)
 		{
 			std::fill(_buffer.begin(), _buffer.end(), value);
 		}

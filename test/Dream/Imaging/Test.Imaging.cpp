@@ -25,7 +25,7 @@ namespace Dream
 					examiner << "Image was filled with white" << std::endl;
 					auto pixels = reader(*image);
 
-					Vector<3, ByteT> pixel = pixels[Vec2(0, 0)], white(255, 255, 255);
+					Vector<3, Byte> pixel = pixels[Vec2(0, 0)], white(255, 255, 255);
 
 					examiner.check_equal(pixel, white);
 
@@ -55,10 +55,10 @@ namespace Dream
 
 					image->fill(0xFF);
 
-					Vector<3, ByteT> color {0x11, 0x22, 0x33};
+					Vector<3, Byte> color {0x11, 0x22, 0x33};
 					writer(*image).set({0, 0}, color);
 
-					Vector<3, ByteT> output;
+					Vector<3, Byte> output;
 					reader(*image).get<3>({0, 0}, output);
 
 					examiner << "Check the colour is correct" << std::endl;

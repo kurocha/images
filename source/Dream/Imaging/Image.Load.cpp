@@ -131,7 +131,7 @@ namespace Dream {
 
 				result_image = new Image(Vec2u(width, height), pixel_format, data_type);
 
-				ByteT *line = result_image->data();
+				Byte *line = result_image->data();
 				jpeg_start_decompress(&cinfo);
 
 				// read jpeg image
@@ -234,10 +234,10 @@ namespace Dream {
 
 				// Allocate the image_data buffer.
 				result_image = new Image(Vec2u(width, height), format, data_type);
-				ByteT *image_bytes = result_image->data();
+				Byte *image_bytes = result_image->data();
 				DREAM_ASSERT(image_bytes != NULL);
 
-				//ByteT * image_data = (unsigned char *) malloc(rowbytes * height);
+				//Byte * image_data = (unsigned char *) malloc(rowbytes * height);
 				ppb_row_pointers = (png_bytepp)malloc(height * sizeof(png_bytep));
 				for (unsigned i = 0; i < height; i++)
 					ppb_row_pointers[i] = image_bytes + i * row_bytes;

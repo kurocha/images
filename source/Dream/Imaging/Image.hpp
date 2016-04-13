@@ -48,17 +48,17 @@ namespace Dream {
 			virtual ~Image ();
 
 			virtual const PixelLayout & layout () const;
-			virtual const ByteT * data () const;
+			virtual const Byte * data () const;
 
 			const MutableBuffer & buffer () const { return _buffer; }
 			MutableBuffer & buffer () { return _buffer; }
-			ByteT * data () { return _buffer.begin(); }
+			Byte * data () { return _buffer.begin(); }
 
 			const Vec2u & size() const { return _size; }
 
 			void resize(const Vec2u & size, PixelFormat pixel_format, DataType data_type);
 
-			void fill(ByteT value = 0);
+			void fill(Byte value = 0);
 
 			// Reads an image from either PNG or JPEG data:
 			static Ref<Image> load_from_data (const Ptr<IData> data);
@@ -107,7 +107,7 @@ namespace Dream {
 			const CoordinateT & size () const { return _size; }
 		};
 
-		inline Reader<const ByteT, 2> reader (const Image & image)
+		inline Reader<const Byte, 2> reader (const Image & image)
 		{
 			return {image.data(), image.size(), image.layout().bytes_per_pixel()};
 		}
@@ -154,7 +154,7 @@ namespace Dream {
 			}
 		};
 
-		inline Writer<ByteT, 2> writer (Image & image)
+		inline Writer<Byte, 2> writer (Image & image)
 		{
 			return {image.data(), image.size(), image.layout().bytes_per_pixel()};
 		}
