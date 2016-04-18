@@ -20,143 +20,27 @@ namespace Dream {
 		using namespace Resources;
 		using namespace Euclid::Numerics;
 		
-		enum class ImageType {
-			UNKNOWN, JPEG, PNG
-		};
-		
-		ImageType read_image_type(const Buffer & buffer);
-		
-		// This class represents your typical 2-dimentional uncompressed image.
-		class Image : public Object, virtual public IPixelBuffer {
+		class Image : public Object
+		{
 		public:
 			class Loader : public Object, virtual public ILoadable {
 			public:
 				virtual void register_loader_types (ILoader * loader);
 				virtual Ref<Object> load_from_data (const Ptr<IData> data, const ILoader * loader);
 			};
-
-		protected:
-			PixelLayout _layout;
-
-			Vec2u _size;
-			DynamicBuffer _buffer;
-
-			void allocate();
-
-		public:
-			Image(const Vec2u & size, PixelFormat pixel_format, DataType data_type);
-			virtual ~Image ();
-
-			virtual const PixelLayout & layout () const;
-			virtual const Byte * data () const;
-
-			const MutableBuffer & buffer () const { return _buffer; }
-			MutableBuffer & buffer () { return _buffer; }
-			Byte * data () { return _buffer.begin(); }
-
-			const Vec2u & size() const { return _size; }
-
-			void resize(const Vec2u & size, PixelFormat pixel_format, DataType data_type);
-
-			void fill(Byte value = 0);
-
-			// Reads an image from either PNG or JPEG data:
-			static Ref<Image> load_from_data (const Ptr<IData> data);
 			
-			// Writes an image out as a PNG:
-			static Ref<IData> save_to_data (const Ptr<Image> image);
-		};
-
-		template <typename DataT, dimension N>
-		class Reader {
+			typedef Vector<3, std::size_t> SizeType;
+			
 		protected:
-			typedef Vector<N, std::size_t> CoordinateT;
-			typedef typename std::remove_const<DataT>::type PixelElementT;
-
-			DataT * _data;
-			CoordinateT _size;
-			std::uint8_t _bytes_per_pixel;
-
-			std::size_t offset (const CoordinateT & coordinate) const
-			{
-				std::size_t pixel_offset = 0, stride = 1;
-
-				for (dimension n = 0; n < N; n += 1) {
-					pixel_offset += coordinate[n] * stride;
-					stride *= _size[n];
-				}
-
-				return (pixel_offset * _bytes_per_pixel);
-			}
-
+			Ref<IData> _data;
+			SizeType _size;
+			
 		public:
-			Reader(DataT * data, const CoordinateT & size, std::uint8_t bytes_per_pixel) : _data(data), _size(size), _bytes_per_pixel(bytes_per_pixel)
-			{
-			}
-
-			DataT * operator[] (const CoordinateT & coordinate) const
-			{
-				return _data + offset(coordinate);
-			}
-
-			template <dimension E>
-			void get(const CoordinateT & coordinate, Vector<E, PixelElementT> & pixel) const {
-				std::copy_n((*this)[coordinate], E, pixel.begin());
-			}
-
-			const CoordinateT & size () const { return _size; }
+			Image(Ptr<IData> data);
+			virtual ~Image();
+			
+			const SizeType & size() const { return _size; }
+			virtual void convert(PixelLayout2D _layout, Byte * data);
 		};
-
-		inline Reader<const Byte, 2> reader (const Image & image)
-		{
-			return {image.data(), image.size(), image.layout().bytes_per_pixel()};
-		}
-
-		template <typename DataT, dimension N>
-		inline Reader<DataT, N> reader (DataT * data, Vector<N, std::size_t> size, uint8_t bytes_per_pixel) {
-			return {data, size, bytes_per_pixel};
-		}
-
-		template <typename DataT, dimension N>
-		struct Writer : public Reader<DataT, N> {
-		protected:
-			typedef Vector<N, std::size_t> CoordinateT;
-			typedef typename std::remove_const<DataT>::type PixelElementT;
-
-			template <typename ReaderT>
-			inline void copy(dimension d, CoordinateT & offset, const ReaderT & reader, const CoordinateT & from, const CoordinateT & to, const CoordinateT & size) {
-				
-				if (d == 0) {
-					std::copy_n(reader[from + offset], size[0], (*this)[to + offset]);
-				} else {
-					for (std::size_t n = 0; n < size[d]; n += 1) {
-						offset[d] = n;
-						copy(d-1, offset, reader, from, to, size);
-					}
-				}
-			}
-
-		public:
-			Writer(DataT * data, const CoordinateT & size, std::uint8_t bytes_per_pixel) : Reader<DataT, N>(data, size, bytes_per_pixel)
-			{
-			}
-
-			template <typename ReaderT>
-			void copy(const ReaderT & reader, const CoordinateT & from, const CoordinateT & to, const CoordinateT size) {
-				CoordinateT offset = 0;
-
-				copy(N-1, offset, reader, from, to, size);
-			}
-
-			template <dimension E>
-			void set(const CoordinateT & coordinate, const Vector<E, PixelElementT> & pixel) {
-				std::copy_n(pixel.begin(), E, (*this)[coordinate]);
-			}
-		};
-
-		inline Writer<Byte, 2> writer (Image & image)
-		{
-			return {image.data(), image.size(), image.layout().bytes_per_pixel()};
-		}
 	}
 }

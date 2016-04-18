@@ -15,21 +15,14 @@
 #include <Dream/Core/Buffer.hpp>
 
 #include <Euclid/Numerics/Vector.hpp>
+#include <iostream>
 
 namespace Dream {
 	namespace Imaging {
-		using namespace Euclid::Numerics::Constants;
-
-		/// Pixel component data type. All data types are assumed to be unsigned.
-		enum class DataType : unsigned {
-			BYTE = 0x0101,
-			SHORT = 0x0202,
-			INTEGER = 0x0304,
-			FLOAT = 0x0404,
-		};
+		using namespace Euclid::Numerics;
 
 		/// Image pixel formats.
-		enum class PixelFormat : unsigned {
+		enum class PixelFormat : std::uint16_t {
 			// Single channel formats:
 			R = 0x0101,
 			G = 0x0201,
@@ -46,46 +39,135 @@ namespace Dream {
 			LA = 0x0902,
 		};
 
-		std::uint8_t byte_size(DataType type);
-		std::uint8_t channel_count(PixelFormat type);
+		constexpr std::uint8_t channel_count(PixelFormat pixel_format) {
+			return static_cast<std::uint8_t>(pixel_format);
+		}
+		
+		template <std::size_t N>
+		Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, Vector<N, std::size_t> stride) {
+			return stride;
+		}
+		
+		// This function computes the stride of a given multi-dimensional array size with a given initial stride.
+		template <std::size_t N, std::size_t M>
+		Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, Vector<M, std::size_t> stride) {
+			return calculate_stride(size, stride << (stride[M-1] * size[M]));
+		}
+		
+		// This function computes the stride of a given multi-dimensional array size with a given initial stride.
+		template <std::size_t N>
+		Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, std::size_t bytes_per_element) {
+			Vector<1, std::size_t> stride(size[0] * bytes_per_element);
+			return calculate_stride(size, stride);
+		}
+		
+		template <std::size_t N, std::size_t M>
+		std::size_t byte_offset(std::size_t bytes_per_element, Vector<N, std::size_t> stride, Vector<M, std::size_t> coordinates)
+		{
+			static_assert(M <= N, "Coordinate must have less or same number of dimensions.");
 
-		using Dimensions = std::vector<std::size_t>;
+			std::size_t offset = 0, current_stride = bytes_per_element;
 
-		struct PixelLayout {
-			PixelFormat format;
-			DataType data_type;
+			for (std::size_t m = 0; m < M; m += 1) {
+				offset += coordinates[m] * current_stride;
+				current_stride = stride[m];
+			}
 
-			// The size in pixels for each dimension.
-			Dimensions dimensions;
+			return offset;
+		}
+		
+		template <PixelFormat PIXEL_FORMAT = PixelFormat::RGBA, typename DataType = Byte, std::size_t N = 2>
+		class PixelLayout {
+		public:
+			typedef Euclid::Numerics::Vector<N, std::size_t> SizeType;
+			typedef Euclid::Numerics::Vector<channel_count(PIXEL_FORMAT), DataType> PixelType;
 			
-			std::size_t data_size() const;
+		protected:
+			SizeType _size, _stride;
+			
+		public:
+			constexpr static std::size_t pixel_byte_size() {
+				return sizeof(DataType) * channel_count(PIXEL_FORMAT);
+			}
+			
+			const SizeType & size() const { return _size; }
+			const SizeType & stride() const { return _stride; }
+			
+			std::size_t data_size() const {
+				return _stride.back();
+			}
+			
+			template <typename StrideType>
+			PixelLayout(const SizeType & size, const StrideType & stride) : _size(size), _stride(calculate_stride(size, stride))
+			{
+			}
+			
+			PixelLayout(const SizeType & size) : _size(size), _stride(calculate_stride(size, pixel_byte_size()))
+			{
+			}
+			
+			template <std::size_t M>
+			std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
+				return Imaging::byte_offset(pixel_byte_size(), _stride, coordinates);
+			}
 
-			std::uint8_t channel_count() const { return Imaging::channel_count(format); }
-			std::uint8_t bytes_per_pixel() const { return channel_count() * byte_size(data_type); }
+			std::vector<Byte*> generate_row_pointers(Byte* data) {
+				std::vector<Byte*> row_pointers;
+				SizeType offset = ZERO;
+				
+				append_row_pointers(data, offset, row_pointers);
+				
+				return row_pointers;
+			}
+			
+		private:
+			void append_row_pointers(Byte* data, SizeType & offset, std::vector<Byte*> & pointers, std::size_t n = N - 1)
+			{
+				if (n == 0) {
+					pointers.push_back(data + byte_offset(offset));
+				} else {
+					for (offset[n] = 0; offset[n] < _size[n]; offset[n] += 1) {
+						append_row_pointers(data, offset, pointers, n - 1);
+					}
+				}
+			}
 		};
 
 		// A pixel buffer is a container for pixel data along with a layout that allows for interpretation of the buffer contents. This typically includes a pixel format which describes the layout of colour channels within an individual pixel element, a data type which describes the storage for each pixel component and a size which describes the organisation of pixel data into rows and columns and potentially other dimensions.
 		class IPixelBuffer : virtual public IObject {
 		public:
 			virtual ~IPixelBuffer();
-
-			virtual const PixelLayout & layout () const = 0;
+			
 			virtual const Byte * data () const = 0;
 		};
 
-		using Core::Buffer;
-
-		class PixelBuffer : virtual public IPixelBuffer {
+		template <typename PixelLayoutType>
+		class PixelBuffer : public Object, virtual public IPixelBuffer {
 		protected:
-			PixelLayout _pixel_layout;
-			Shared<Buffer> _buffer;
+			PixelLayoutType _pixel_layout;
+			Core::DynamicBuffer _buffer;
+
+			void resize() {
+				_buffer.resize(_pixel_layout.data_size());
+			}
 
 		public:
-			PixelBuffer (const PixelLayout & pixel_layout, Shared<Buffer> buffer);
-			virtual ~PixelBuffer();
-
-			virtual const PixelLayout & layout () const;
-			virtual const Byte * data () const;
+			typedef typename PixelLayoutType::SizeType SizeType;
+			typedef typename PixelLayoutType::PixelType PixelType;
+			
+			PixelBuffer (const PixelLayoutType & pixel_layout) : _pixel_layout(pixel_layout) { resize(); }
+			virtual ~PixelBuffer() {}
+			
+			const Core::MutableBuffer & buffer() const { return _buffer; }
+			Core::MutableBuffer & buffer() { return _buffer; }
+			
+			virtual const Byte * data() const { return _buffer.begin(); }
+			
+			const PixelLayoutType & pixel_layout() const { return _pixel_layout; }
 		};
+		
+		// Standard efficient layouts:
+		using PixelLayout2D = PixelLayout<>;
+		using PixelBuffer2D = PixelBuffer<PixelLayout2D>;
 	}
 }

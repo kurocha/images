@@ -1,7 +1,7 @@
 
 #include <UnitTest/UnitTest.hpp>
 
-#include <Dream/Imaging/Image.hpp>
+#include <Dream/Imaging/PixelBuffer.hpp>
 #include <Euclid/Numerics/Vector.IO.hpp>
 
 #include <cstring>
@@ -10,16 +10,18 @@ namespace Dream
 {
 	namespace Imaging
 	{
-		UnitTest::Suite ImageTestSuite {
-			"Dream::Imaging::Image",
+		UnitTest::Suite PixelBufferTestSuite {
+			"Dream::Imaging::PixelBuffer",
 
-			{"Image Reader/Writer",
+			{"PixelBuffer Initialization",
 				[](UnitTest::Examiner & examiner) {
-					Ref<Image> image = new Image({8, 8}, PixelFormat::L, DataType::BYTE);
+					PixelLayout2D pixel_layout({{8, 8}});
+					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
 
 					examiner << "Image data was allocated" << std::endl;
-					examiner.check_equal(image->buffer().size(), 8*8);
+					examiner.check_equal(pixel_buffer->buffer().size(), 8*8*4);
 
+/*
 					image->fill(0xFF);
 
 					examiner << "Image was filled with white" << std::endl;
@@ -43,9 +45,10 @@ namespace Dream
 
 					for (std::size_t i = 4; i < 8; i += 1)
 						examiner.check_equal(std::memcmp(pixels[Vec2(0, i)], white_row, 8), 0);
+*/
 				}
 			},
-
+/*
 			{"Pixel Writer",
 				[](UnitTest::Examiner & examiner) {
 					Ref<Image> image = new Image({8, 8}, PixelFormat::RGB, DataType::BYTE);
@@ -65,6 +68,7 @@ namespace Dream
 					examiner.check_equal(output, color);
 				}
 			}
+			*/
 		};
 	}
 }

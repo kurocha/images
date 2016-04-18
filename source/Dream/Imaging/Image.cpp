@@ -10,6 +10,8 @@
 #include "Image.hpp"
 #include <cassert>
 
+#include "PNGImage.hpp"
+
 namespace Dream {
 	namespace Imaging {
 		/* From MacOS X mime.magic:
@@ -29,7 +31,11 @@ namespace Dream {
 			0	string		II		image/tiff
 		*/
 		
-		ImageType read_image_type(const Buffer & buffer) {
+		enum class ImageType {
+			UNKNOWN, JPEG, PNG
+		};
+		
+		static ImageType read_image_type(const Buffer & buffer) {
 			if (buffer.size() < 4) return ImageType::UNKNOWN;
 			
 			if (buffer[0] == 0xFF && buffer[1] == 0xD8)
@@ -49,48 +55,21 @@ namespace Dream {
 
 		Ref<Object> Image::Loader::load_from_data(const Ptr<IData> data, const ILoader * loader)
 		{
-			return Image::load_from_data(data);
+			switch (read_image_type(*data->buffer())) {
+				case ImageType::PNG:
+					return new PNGImage(data);
+				case ImageType::JPEG:
+				case ImageType::UNKNOWN:
+					return nullptr;
+			}
 		}
 
-		Image::Image(const Vec2u & size, PixelFormat pixel_format, DataType data_type)
+		Image::Image(Ptr<IData> data) : _data(data), _size(ZERO)
 		{
-			resize(size, pixel_format, data_type);
 		}
 
 		Image::~Image ()
 		{
-		}
-
-		const PixelLayout & Image::layout () const
-		{
-			return _layout;
-		}
-
-		const Byte * Image::data () const
-		{
-			return _buffer.begin();
-		}
-
-		void Image::allocate ()
-		{
-			_buffer.resize(_size.product() * _layout.bytes_per_pixel());
-		}
-
-		void Image::resize(const Vec2u & size, PixelFormat pixel_format, DataType data_type)
-		{
-			_layout.format = pixel_format;
-			_layout.data_type = data_type;
-			_layout.dimensions = {size[WIDTH], size[HEIGHT]};
-
-			_size = size;
-
-			if (_size.product() > 0)
-				allocate();
-		}
-
-		void Image::fill(Byte value)
-		{
-			std::fill(_buffer.begin(), _buffer.end(), value);
 		}
 	}
 }

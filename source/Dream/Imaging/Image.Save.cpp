@@ -23,6 +23,8 @@ namespace Dream
 	{
 		using namespace Core::Logging;
 
+#if 0
+
 		static void png_write_to_buffer (png_structp png_writer, png_bytep data, png_size_t length)
 		{
 			DynamicBuffer * buffer = (DynamicBuffer*)png_get_io_ptr(png_writer);
@@ -128,6 +130,8 @@ namespace Dream
 
 			png_data->buffer()->write_to_file("UnitTest.png");
 		}
+
+#endif
 
 #endif
 	}
