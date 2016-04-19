@@ -16,6 +16,8 @@ namespace Dream
 {
 	namespace Imaging
 	{
+		static const bool DEBUG = false;
+		
 		static void png_error (png_structp png_reader, png_const_charp msg) {
 			throw std::runtime_error(msg);
 		}
@@ -56,7 +58,7 @@ namespace Dream
 			
 			void process_data(const Byte * data, std::size_t size)
 			{
-				log_debug("process_data(", (void*)data, ",", size, ")");
+				if (DEBUG) log_debug("process_data(", (void*)data, ",", size, ")");
 				
 				if (setjmp(png_jmpbuf(png_reader))) {
 					throw std::runtime_error("libpng blew up!");
