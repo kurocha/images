@@ -190,6 +190,10 @@ namespace Dream
 				png_info = png_create_info_struct(png_writer);
 				DREAM_ASSERT(png_info != NULL && "png_create_info_struct returned NULL!");
 
+				// This improves performance significantly at the cost of file size:
+				png_set_filter(png_writer, PNG_FILTER_TYPE_BASE, PNG_FILTER_NONE);
+				png_set_compression_level(png_writer, 1);
+
 				png_set_write_fn(png_writer, static_cast<void *>(result_data.get()), png_write_to_buffer, NULL);
 
 				int bit_depth = 8;
