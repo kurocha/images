@@ -38,6 +38,8 @@ end
 
 define_target "dream-imaging-tests" do |target|
 	target.build do
+		copy test_assets: target.package.path.glob('test/**/*.{png}')
+		
 		run tests: "DreamImaging", source_files: target.package.path.glob('test/Dream/**/*.cpp')
 	end
 	

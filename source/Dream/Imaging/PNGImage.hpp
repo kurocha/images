@@ -24,7 +24,7 @@ namespace Dream
 			PNGImage(Ptr<IData> data);
 			virtual ~PNGImage();
 			
-			virtual void convert(PixelLayout2D _layout, Byte * data);
+			virtual void convert(PixelLayout2D layout, Byte * data);
 		};
 	}
 }

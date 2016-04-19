@@ -8,6 +8,8 @@
 
 #include "PNGImage.hpp"
 
+#include <iostream>
+
 namespace Dream
 {
 	namespace Imaging
@@ -44,16 +46,21 @@ namespace Dream
 						size = buffer.size() - offset;
 						stop = true;
 					}
+					
+					process_data(buffer.begin() + offset, size);
+					offset += size;
 				}
 			}
 			
-			void process_data(png_bytep buffer, png_uint_32 length)
+			void process_data(const Byte * data, std::size_t size)
 			{
+				log_debug("process_data(", (void*)data, ",", size, ")");
+				
 				if (setjmp(png_jmpbuf(png_reader))) {
 					throw std::runtime_error("libpng blew up!");
 				}
 
-				png_process_data(png_reader, png_info, buffer, length);
+				png_process_data(png_reader, png_info, const_cast<png_bytep>(data), size);
 			}
 			
 			static void info_callback(png_structp png_ptr, png_infop info) {

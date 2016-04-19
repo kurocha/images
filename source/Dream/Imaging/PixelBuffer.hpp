@@ -162,6 +162,11 @@ namespace Dream {
 			Core::MutableBuffer & buffer() { return _buffer; }
 			
 			virtual const Byte * data() const { return _buffer.begin(); }
+			virtual Byte * data() { return _buffer.begin(); }
+			
+			PixelType & operator[] (const SizeType & coordinates) {
+				return *reinterpret_cast<PixelType *>(data() + _pixel_layout.byte_offset(coordinates));
+			}
 			
 			const PixelLayoutType & pixel_layout() const { return _pixel_layout; }
 		};

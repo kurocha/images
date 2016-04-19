@@ -40,7 +40,7 @@ namespace Dream {
 			virtual ~Image();
 			
 			const SizeType & size() const { return _size; }
-			virtual void convert(PixelLayout2D _layout, Byte * data);
+			virtual void convert(PixelLayout2D _layout, Byte * data) = 0;
 		};
 	}
 }
