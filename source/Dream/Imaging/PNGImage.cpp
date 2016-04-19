@@ -8,7 +8,9 @@
 
 #include "PNGImage.hpp"
 
-#include <iostream>
+extern "C" {
+#include <png.h>
+}
 
 namespace Dream
 {
@@ -151,13 +153,67 @@ namespace Dream
 		{
 		}
 		
-		void PNGImage::convert(PixelLayout2D _layout, Byte * data)
+		void PNGImage::convert(PixelLayout2D _layout, Byte * data) const
 		{
 			PNGRowReader reader;
 			
 			reader.rows = _layout.generate_row_pointers(data);
 			
 			reader.read(*_data->buffer(), _data->size());
+		}
+		
+		static void png_write_to_buffer (png_structp png_writer, png_bytep data, png_size_t length)
+		{
+			DynamicBuffer * buffer = (DynamicBuffer*)png_get_io_ptr(png_writer);
+
+			buffer->append(length, data);
+		}
+
+		Ref<IData> PNGImage::save(PixelLayout2D layout, const Byte * data)
+		{
+			// Structures to process the image:
+			png_structp png_writer = NULL;
+			png_infop png_info = NULL;
+			
+			// The buffer to contain the results:
+			Shared<DynamicBuffer> result_data = new DynamicBuffer;
+			
+			// Data pointers, one per row:
+			auto rows = layout.generate_row_pointers(data);
+			
+			try {
+				png_writer = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error, NULL);
+				DREAM_ASSERT(png_writer != NULL && "png_create_write_struct returned NULL!");
+
+				png_info = png_create_info_struct(png_writer);
+				DREAM_ASSERT(png_info != NULL && "png_create_info_struct returned NULL!");
+
+				png_set_write_fn(png_writer, static_cast<void *>(result_data.get()), png_write_to_buffer, NULL);
+
+				int bit_depth = 8;
+				int color_type = PNG_COLOR_TYPE_RGBA;
+				
+				auto size = layout.size();
+				png_set_IHDR(png_writer, png_info, size[WIDTH], size[HEIGHT], bit_depth, color_type, 0, 0, 0);
+
+				png_write_info(png_writer, png_info);
+
+				png_write_image(png_writer, (png_bytepp)rows.data());
+
+				// After you are finished writing the image, you should finish writing the file.
+				png_write_end(png_writer, NULL);
+			} catch (std::exception & e) {
+				log_error("PNG write error: ", e.what());
+
+				if (png_writer)
+					png_destroy_write_struct(&png_writer, &png_info);
+
+				throw;
+			}
+
+			png_destroy_write_struct(&png_writer, &png_info);
+
+			return new BufferedData(result_data);
 		}
 	}
 }

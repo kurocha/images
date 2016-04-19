@@ -111,8 +111,9 @@ namespace Dream {
 				return Imaging::byte_offset(pixel_byte_size(), _stride, coordinates);
 			}
 
-			std::vector<Byte*> generate_row_pointers(Byte* data) {
-				std::vector<Byte*> row_pointers;
+			template <typename PointerType>
+			std::vector<PointerType> generate_row_pointers(PointerType data) {
+				std::vector<PointerType> row_pointers;
 				SizeType offset = ZERO;
 				
 				append_row_pointers(data, offset, row_pointers);
@@ -121,7 +122,8 @@ namespace Dream {
 			}
 			
 		private:
-			void append_row_pointers(Byte* data, SizeType & offset, std::vector<Byte*> & pointers, std::size_t n = N - 1)
+			template <typename PointerType>
+			void append_row_pointers(PointerType data, SizeType & offset, std::vector<PointerType> & pointers, std::size_t n = N - 1)
 			{
 				if (n == 0) {
 					pointers.push_back(data + byte_offset(offset));

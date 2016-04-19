@@ -19,7 +19,7 @@ namespace Dream
 			
 			{"can load file and size is correct",
 				[](UnitTest::Examiner & examiner) {
-					Ref<IData> data = new Core::LocalFileData("./test/Dream/Imaging/Dream.png");
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/Dream.png");
 					Ref<PNGImage> image = new PNGImage(data);
 					
 					examiner << "Width and size should be loaded correctly" << std::endl;
@@ -29,7 +29,7 @@ namespace Dream
 			
 			{"can load file and convert to pixel buffer",
 				[](UnitTest::Examiner & examiner) {
-					Ref<IData> data = new Core::LocalFileData("./test/Dream/Imaging/Dream.png");
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/Dream.png");
 					Ref<PNGImage> image = new PNGImage(data);
 					
 					PixelLayout2D pixel_layout{image->size()};
@@ -43,7 +43,7 @@ namespace Dream
 			
 			{"can load RGB file and convert to RGBA pixel buffer",
 				[](UnitTest::Examiner & examiner) {
-					Ref<IData> data = new Core::LocalFileData("./test/Dream/Imaging/RGB.png");
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/RGB.png");
 					Ref<PNGImage> image = new PNGImage(data);
 					
 					PixelLayout2D pixel_layout{image->size()};
@@ -58,6 +58,26 @@ namespace Dream
 					examiner.expect((*pixel_buffer)[{5, 0}]) == Vector<4, Byte>{0, 0, 0, 255};
 				}
 			},
+			
+			{"can write RGBA file",
+				[](UnitTest::Examiner & examiner) {
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/RGB.png");
+					Ref<PNGImage> image = new PNGImage(data);
+					
+					PixelLayout2D pixel_layout{image->size()};
+					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
+					image->convert(pixel_layout, pixel_buffer->data());
+					
+					Ref<IData> output_data = PNGImage::save(pixel_layout, pixel_buffer->data());
+					
+					examiner << "Output data was generated." << std::endl;
+					examiner.expect(output_data->size()) > 0;
+					
+					Ref<PNGImage> output_image = new PNGImage(output_data);
+					examiner << "Output image has same size as input" << std::endl;
+					examiner.expect(output_image->size()) == image->size();
+				}
+			}
 		};
 	}
 }

@@ -10,10 +10,6 @@
 
 #include "Image.hpp"
 
-extern "C" {
-#include <png.h>
-}
-
 namespace Dream
 {
 	namespace Imaging
@@ -24,7 +20,9 @@ namespace Dream
 			PNGImage(Ptr<IData> data);
 			virtual ~PNGImage();
 			
-			virtual void convert(PixelLayout2D layout, Byte * data);
+			virtual void convert(PixelLayout2D layout, Byte * data) const;
+			
+			static Ref<IData> save(PixelLayout2D layout, const Byte * data);
 		};
 	}
 }
