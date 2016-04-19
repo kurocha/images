@@ -145,7 +145,7 @@ namespace Dream
 			DREAM_ASSERT(png_check_sig((png_byte*)data->buffer()->begin(), 8));
 			
 			PNGHeaderReader reader;
-			reader.read(*data->buffer(), 256);
+			reader.read(*data->buffer(), 1024);
 			_size = {reader.width, reader.height, 1};
 		}
 		
