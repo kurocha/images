@@ -1,13 +1,16 @@
 language: cpp
+sudo: false
 script:
   - teapot -c test fetch
   - teapot -c test build Test/DreamImaging
 compiler: clang
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libstdc++-4.8-dev
+    - nasm
 install:
-# libstdc++-4.8-dev
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install libstdc++-4.8-dev
-# ruby 2.3 and teapot
   - rvm use 2.3 --install --binary --fuzzy
   - bundle install
