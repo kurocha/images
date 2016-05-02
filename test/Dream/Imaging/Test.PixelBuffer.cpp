@@ -15,7 +15,7 @@ namespace Dream
 
 			{"PixelBuffer Initialization",
 				[](UnitTest::Examiner & examiner) {
-					PixelLayout2D pixel_layout({{8, 8}});
+					PixelBufferLayout2D pixel_layout({{8, 8}});
 					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
 
 					examiner << "Image data was allocated" << std::endl;

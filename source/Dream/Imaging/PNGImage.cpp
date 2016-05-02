@@ -155,7 +155,7 @@ namespace Dream
 		{
 		}
 		
-		void PNGImage::convert(PixelLayout2D _layout, Byte * data) const
+		void PNGImage::convert(PixelBufferLayout2D _layout, Byte * data) const
 		{
 			PNGRowReader reader;
 			
@@ -171,7 +171,7 @@ namespace Dream
 			buffer->append(length, data);
 		}
 
-		Ref<IData> PNGImage::save(PixelLayout2D layout, const Byte * data)
+		Ref<IData> PNGImage::save(PixelBufferLayout2D layout, const Byte * data)
 		{
 			// Structures to process the image:
 			png_structp png_writer = NULL;

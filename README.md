@@ -6,7 +6,7 @@ Dream Imaging provides image loading, saving and manipulation.
 
 ## Usage
 
-`Dream::Imaging` provides a few useful classes for dealing with pixel data: `Dream::Imaging::PixelBuffer` which has an associated `Dream::Imaging::PixelLayout`, and `Dream::Imaging::Image` represents a typical 2D image.
+`Dream::Imaging` provides a few useful classes for dealing with pixel data: `Dream::Imaging::PixelBuffer` which has an associated `Dream::Imaging::PixelBufferLayout`, and `Dream::Imaging::Image` represents a typical 2D image.
 
 `Dream::Imaging::Image` can be loaded by `Dream::Resources::Loader`, but can also be loaded and saved directly:
 

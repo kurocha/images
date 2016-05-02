@@ -32,7 +32,7 @@ namespace Dream
 					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/9452-v2.jpg");
 					Ref<JPEGImage> image = new JPEGImage(data);
 					
-					PixelLayout2D pixel_layout{image->size()};
+					PixelBufferLayout2D pixel_layout{image->size()};
 					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
 					image->convert(pixel_layout, pixel_buffer->data());
 					
@@ -46,7 +46,7 @@ namespace Dream
 					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/9452-v2.jpg");
 					Ref<JPEGImage> image = new JPEGImage(data);
 					
-					PixelLayout2D pixel_layout{image->size()};
+					PixelBufferLayout2D pixel_layout{image->size()};
 					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
 					image->convert(pixel_layout, pixel_buffer->data());
 					

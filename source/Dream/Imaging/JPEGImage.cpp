@@ -33,7 +33,7 @@ namespace Dream
 			tjDestroy(_decompressor);
 		}
 		
-		void JPEGImage::convert(PixelLayout2D layout, Byte * data) const
+		void JPEGImage::convert(PixelBufferLayout2D layout, Byte * data) const
 		{
 			tjDecompress2(
 				_decompressor,
@@ -45,7 +45,7 @@ namespace Dream
 			);
 		}
 		
-		Ref<IData> JPEGImage::save(PixelLayout2D layout, const Byte * data, std::uint32_t quality)
+		Ref<IData> JPEGImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality)
 		{
 			std::size_t output_size = 0;
 			Byte * output_data = NULL; //!< Memory is allocated by tjCompress2 if _jpegSize == 0

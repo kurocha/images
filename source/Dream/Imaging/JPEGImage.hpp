@@ -24,9 +24,9 @@ namespace Dream
 			JPEGImage(Ptr<IData> data);
 			virtual ~JPEGImage();
 			
-			virtual void convert(PixelLayout2D layout, Byte * data) const;
+			virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
 			
-			static Ref<IData> save(PixelLayout2D layout, const Byte * data, std::uint32_t quality = 75);
+			static Ref<IData> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality = 75);
 			
 		private:
 			tjhandle _decompressor;

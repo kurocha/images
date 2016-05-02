@@ -77,7 +77,7 @@ namespace Dream {
 		}
 		
 		template <PixelFormat PIXEL_FORMAT = PixelFormat::RGBA, typename DataType = Byte, std::size_t N = 2>
-		class PixelLayout {
+		class PixelBufferLayout {
 		public:
 			typedef Euclid::Numerics::Vector<N, std::size_t> SizeType;
 			typedef Euclid::Numerics::Vector<channel_count(PIXEL_FORMAT), DataType> PixelType;
@@ -93,11 +93,11 @@ namespace Dream {
 			}
 			
 			template <typename StrideType>
-			PixelLayout(const SizeType & _size, const StrideType & _stride) : size(_size), stride(calculate_stride(_size, _stride))
+			PixelBufferLayout(const SizeType & _size, const StrideType & _stride) : size(_size), stride(calculate_stride(_size, _stride))
 			{
 			}
 			
-			PixelLayout(const SizeType & _size) : size(_size), stride(calculate_stride(_size, pixel_byte_size()))
+			PixelBufferLayout(const SizeType & _size) : size(_size), stride(calculate_stride(_size, pixel_byte_size()))
 			{
 			}
 			
@@ -138,21 +138,21 @@ namespace Dream {
 			virtual const Byte * data () const = 0;
 		};
 
-		template <typename PixelLayoutType>
+		template <typename PixelBufferLayoutType>
 		class PixelBuffer : public Object, virtual public IPixelBuffer {
 		protected:
-			PixelLayoutType _pixel_layout;
+			PixelBufferLayoutType _layout;
 			Core::DynamicBuffer _buffer;
 
 			void resize() {
-				_buffer.resize(_pixel_layout.data_size());
+				_buffer.resize(_layout.data_size());
 			}
 
 		public:
-			typedef typename PixelLayoutType::SizeType SizeType;
-			typedef typename PixelLayoutType::PixelType PixelType;
+			typedef typename PixelBufferLayoutType::SizeType SizeType;
+			typedef typename PixelBufferLayoutType::PixelType PixelType;
 			
-			PixelBuffer (const PixelLayoutType & pixel_layout) : _pixel_layout(pixel_layout) { resize(); }
+			PixelBuffer (const PixelBufferLayoutType & layout) : _layout(layout) { resize(); }
 			virtual ~PixelBuffer() {}
 			
 			const Core::MutableBuffer & buffer() const { return _buffer; }
@@ -162,14 +162,14 @@ namespace Dream {
 			virtual Byte * data() { return _buffer.begin(); }
 			
 			PixelType & operator[] (const SizeType & coordinates) {
-				return *reinterpret_cast<PixelType *>(data() + _pixel_layout.byte_offset(coordinates));
+				return *reinterpret_cast<PixelType *>(data() + _layout.byte_offset(coordinates));
 			}
 			
-			const PixelLayoutType & pixel_layout() const { return _pixel_layout; }
+			const PixelBufferLayoutType & layout() const { return _layout; }
 		};
 		
 		// Standard efficient layouts:
-		using PixelLayout2D = PixelLayout<>;
-		using PixelBuffer2D = PixelBuffer<PixelLayout2D>;
+		using PixelBufferLayout2D = PixelBufferLayout<>;
+		using PixelBuffer2D = PixelBuffer<PixelBufferLayout2D>;
 	}
 }
