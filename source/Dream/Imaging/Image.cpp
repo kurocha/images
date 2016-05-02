@@ -51,6 +51,8 @@ namespace Dream {
 		void Image::Loader::register_loader_types (ILoader * loader)
 		{
 			loader->set_loader_for_extension(this, "jpg");
+			loader->set_loader_for_extension(this, "jpeg");
+			
 			loader->set_loader_for_extension(this, "png");
 		}
 
