@@ -199,8 +199,7 @@ namespace Dream
 				int bit_depth = 8;
 				int color_type = PNG_COLOR_TYPE_RGBA;
 				
-				auto size = layout.size();
-				png_set_IHDR(png_writer, png_info, size[WIDTH], size[HEIGHT], bit_depth, color_type, 0, 0, 0);
+				png_set_IHDR(png_writer, png_info, layout.size[WIDTH], layout.size[HEIGHT], bit_depth, color_type, 0, 0, 0);
 
 				png_write_info(png_writer, png_info);
 

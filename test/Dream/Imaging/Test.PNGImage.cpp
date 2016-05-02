@@ -59,7 +59,7 @@ namespace Dream
 				}
 			},
 			
-			{"can write RGBA file",
+			{"can save to RGBA data",
 				[](UnitTest::Examiner & examiner) {
 					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/RGB.png");
 					Ref<PNGImage> image = new PNGImage(data);

@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include "PNGImage.hpp"
+#include "JPEGImage.hpp"
 
 namespace Dream {
 	namespace Imaging {
@@ -59,6 +60,7 @@ namespace Dream {
 				case ImageType::PNG:
 					return new PNGImage(data);
 				case ImageType::JPEG:
+					return new JPEGImage(data);
 				case ImageType::UNKNOWN:
 					return nullptr;
 			}

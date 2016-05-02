@@ -11,21 +11,25 @@
 #include "Image.hpp"
 
 extern "C" {
-#include <jpeglib.h>
+#include <turbojpeg.h>
 }
 
 namespace Dream
 {
 	namespace Imaging
 	{
-		class JPEGImage
+		class JPEGImage : public Image
 		{
 		public:
-			JPEGImage();
+			JPEGImage(Ptr<IData> data);
 			virtual ~JPEGImage();
 			
-		private:
+			virtual void convert(PixelLayout2D layout, Byte * data) const;
 			
+			static Ref<IData> save(PixelLayout2D layout, const Byte * data, std::uint32_t quality = 75);
+			
+		private:
+			tjhandle _decompressor;
 		};
 	}
 }

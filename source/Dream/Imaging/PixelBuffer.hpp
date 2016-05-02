@@ -82,33 +82,28 @@ namespace Dream {
 			typedef Euclid::Numerics::Vector<N, std::size_t> SizeType;
 			typedef Euclid::Numerics::Vector<channel_count(PIXEL_FORMAT), DataType> PixelType;
 			
-		protected:
-			SizeType _size, _stride;
+			SizeType size, stride;
 			
-		public:
 			constexpr static std::size_t pixel_byte_size() {
 				return sizeof(DataType) * channel_count(PIXEL_FORMAT);
 			}
 			
-			const SizeType & size() const { return _size; }
-			const SizeType & stride() const { return _stride; }
-			
 			std::size_t data_size() const {
-				return _stride.back();
+				return stride.back();
 			}
 			
 			template <typename StrideType>
-			PixelLayout(const SizeType & size, const StrideType & stride) : _size(size), _stride(calculate_stride(size, stride))
+			PixelLayout(const SizeType & _size, const StrideType & _stride) : size(_size), stride(calculate_stride(_size, _stride))
 			{
 			}
 			
-			PixelLayout(const SizeType & size) : _size(size), _stride(calculate_stride(size, pixel_byte_size()))
+			PixelLayout(const SizeType & _size) : size(_size), stride(calculate_stride(_size, pixel_byte_size()))
 			{
 			}
 			
 			template <std::size_t M>
 			std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
-				return Imaging::byte_offset(pixel_byte_size(), _stride, coordinates);
+				return Imaging::byte_offset(pixel_byte_size(), stride, coordinates);
 			}
 
 			template <typename PointerType>
@@ -128,7 +123,7 @@ namespace Dream {
 				if (n == 0) {
 					pointers.push_back(data + byte_offset(offset));
 				} else {
-					for (offset[n] = 0; offset[n] < _size[n]; offset[n] += 1) {
+					for (offset[n] = 0; offset[n] < size[n]; offset[n] += 1) {
 						append_row_pointers(data, offset, pointers, n - 1);
 					}
 				}
