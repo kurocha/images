@@ -12,6 +12,7 @@
 #include "PixelBuffer.hpp"
 
 #include <Dream/Resources/Loader.hpp>
+#include <Dream/Core/Data.hpp>
 
 #include <Euclid/Numerics/Vector.IO.hpp>
 
@@ -28,7 +29,7 @@ namespace Dream {
 				using ChainLoader::ChainLoader;
 				virtual ~Loader();
 				
-				Ref<Object> load(const Path & path, const ILoader & top);
+				virtual Ref<Object> load(const Path & path, const ILoader & top) const;
 			};
 			
 			typedef Vector<3, std::size_t> SizeType;

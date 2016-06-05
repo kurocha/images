@@ -8,6 +8,8 @@
 
 #include "PNGImage.hpp"
 
+#include <Dream/Core/Logger.hpp>
+
 extern "C" {
 #include <png.h>
 }
@@ -17,6 +19,7 @@ namespace Dream
 	namespace Imaging
 	{
 		static const bool DEBUG = false;
+		using namespace Dream::Core::Logging;
 		
 		static void png_error (png_structp png_reader, png_const_charp msg) {
 			throw std::runtime_error(msg);
