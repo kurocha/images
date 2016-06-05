@@ -23,10 +23,12 @@ namespace Dream {
 		class Image : public Object
 		{
 		public:
-			class Loader : public Object, virtual public ILoadable {
+			class Loader : public ChainLoader {
 			public:
-				virtual void register_loader_types (ILoader * loader);
-				virtual Ref<Object> load_from_data (const Ptr<IData> data, const ILoader * loader);
+				using ChainLoader::ChainLoader;
+				virtual ~Loader();
+				
+				Ref<Object> load(const Path & path, const ILoader & top);
 			};
 			
 			typedef Vector<3, std::size_t> SizeType;

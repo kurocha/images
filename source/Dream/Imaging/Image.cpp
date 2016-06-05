@@ -48,24 +48,23 @@ namespace Dream {
 			return ImageType::UNKNOWN;
 		}
 		
-		void Image::Loader::register_loader_types (ILoader * loader)
+		Image::Loader::~Loader()
 		{
-			loader->set_loader_for_extension(this, "jpg");
-			loader->set_loader_for_extension(this, "jpeg");
-			
-			loader->set_loader_for_extension(this, "png");
 		}
-
-		Ref<Object> Image::Loader::load_from_data(const Ptr<IData> data, const ILoader * loader)
+		
+		Ref<Object> Image::Loader::load(const Path & path, const ILoader & top) const
 		{
-			switch (read_image_type(*data->buffer())) {
-				case ImageType::PNG:
-					return new PNGImage(data);
-				case ImageType::JPEG:
-					return new JPEGImage(data);
-				case ImageType::UNKNOWN:
-					return nullptr;
+			if (auto data = load_next(path, top).as<IData>())
+			{
+				switch (read_image_type(*data->buffer())) {
+					case ImageType::PNG:
+						return new PNGImage(data);
+					case ImageType::JPEG:
+						return new JPEGImage(data);
+				}
 			}
+			
+			return nullptr;
 		}
 
 		Image::Image(Ptr<IData> data) : _data(data), _size(ZERO)
