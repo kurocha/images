@@ -117,6 +117,8 @@ namespace Dream
 		};
 		
 		struct PNGRowReader : public PNGProgressiveReader {
+			ColorSpace output_color_space;
+			
 			static void prepare_for_rgba8(png_structp png_ptr, png_infop info) {
 				PNGRowReader * reader = static_cast<PNGRowReader *>(png_get_progressive_ptr(png_ptr));
 				
@@ -127,10 +129,22 @@ namespace Dream
 				} else if (reader->bit_depth > 8) {
 					png_set_strip_16(png_ptr);
 				}
-
+				
+				// We prefer linear textures but libpng might need to do some conversions from sRGB to linear. It's also possible to have the GPU do this.. but you need to manually figure this out.
+				// http://http.developer.nvidia.com/GPUGems3/gpugems3_ch24.html
+				switch (reader->output_color_space) {
+					case ColorSpace::LINEAR:
+						png_set_alpha_mode(png_ptr, PNG_ALPHA_PNG, PNG_GAMMA_LINEAR);
+						break;
+					case ColorSpace::SRGB:
+						png_set_alpha_mode(png_ptr, PNG_ALPHA_PNG, PNG_DEFAULT_sRGB);
+						break;
+				}
+				
 				switch (reader->color_type) {
 					case PNG_COLOR_TYPE_RGB:
 						png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+						break;
 					case PNG_COLOR_TYPE_RGB_ALPHA:
 						break;
 					default:
@@ -140,7 +154,8 @@ namespace Dream
 				png_start_read_image(png_ptr);
 			}
 			
-			PNGRowReader() {
+			PNGRowReader(ColorSpace _output_color_space) : output_color_space(_output_color_space)
+			{
 				png_set_progressive_read_fn(png_reader, (void *)static_cast<PNGProgressiveReader *>(this), prepare_for_rgba8, row_callback, end_callback);
 			}
 		};
@@ -160,7 +175,7 @@ namespace Dream
 		
 		void PNGImage::convert(PixelBufferLayout2D _layout, Byte * data) const
 		{
-			PNGRowReader reader;
+			PNGRowReader reader(_layout.color_space);
 			
 			reader.rows = _layout.generate_row_pointers(data);
 			
@@ -196,6 +211,18 @@ namespace Dream
 				// This improves performance significantly at the cost of file size:
 				png_set_filter(png_writer, PNG_FILTER_TYPE_BASE, PNG_FILTER_NONE);
 				png_set_compression_level(png_writer, 1);
+				
+				switch (layout.color_space) {
+					case ColorSpace::LINEAR:
+						// A linear image buffer has a gamma of 1.0 - setting this ensures the image should be processed correctly when displayed.
+						png_set_gAMA(png_writer, png_info, 1.0);
+						break;
+					case ColorSpace::SRGB:
+						// In relative conversion mode, colors are clamped to the closest color in the output gamut.
+						// In perceptual conversion mode, relative changes in colors are retained by compressing saturation to fit in the output gamut.
+						png_set_sRGB_gAMA_and_cHRM(png_writer, png_info, PNG_sRGB_INTENT_PERCEPTUAL);
+						break;
+				}
 
 				png_set_write_fn(png_writer, static_cast<void *>(result_data.get()), png_write_to_buffer, NULL);
 

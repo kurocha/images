@@ -35,6 +35,8 @@ namespace Dream
 		
 		void JPEGImage::convert(PixelBufferLayout2D layout, Byte * data) const
 		{
+			if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("JPEG requires SRGB color space!");
+			
 			tjDecompress2(
 				_decompressor,
 				_data->buffer()->begin(),
@@ -47,6 +49,8 @@ namespace Dream
 		
 		Ref<IData> JPEGImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality)
 		{
+			if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("JPEG requires SRGB color space!");
+			
 			std::size_t output_size = 0;
 			Byte * output_data = NULL; //!< Memory is allocated by tjCompress2 if _jpegSize == 0
 

@@ -76,6 +76,14 @@ namespace Dream {
 			return offset;
 		}
 		
+		// Specifies the color space of the data.
+		enum class ColorSpace {
+			// Data maps linearly from value to color.
+			LINEAR = 0,
+			// Data maps using sRGB gamma and cromaticity from value to color.
+			SRGB = 1
+		};
+		
 		template <PixelFormat PIXEL_FORMAT = PixelFormat::RGBA, typename DataType = Byte, std::size_t N = 2>
 		class PixelBufferLayout {
 		public:
@@ -83,6 +91,7 @@ namespace Dream {
 			typedef Euclid::Numerics::Vector<channel_count(PIXEL_FORMAT), DataType> PixelType;
 			
 			SizeType size, stride;
+			ColorSpace color_space = ColorSpace::SRGB;
 			
 			constexpr static std::size_t pixel_byte_size() {
 				return sizeof(DataType) * channel_count(PIXEL_FORMAT);
