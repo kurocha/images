@@ -110,6 +110,25 @@ namespace Dream {
 			{
 			}
 			
+			template <typename BlockT>
+			void each_coordinate(BlockT block, SizeType & offset, const std::size_t n, const std::size_t m) const {
+				for (offset[n] = 0; offset[n] < size[n]; offset[n] += 1) {
+					if (n == m)
+						block(offset);
+					else
+						each_coordinate(block, offset, n - 1, m);
+				}
+			}
+			
+			template <typename BlockT>
+			SizeType each_coordinate(BlockT block, std::size_t m = 0) const {
+				SizeType offset = 0;
+				
+				each_coordinate(block, offset, N - 1, m);
+				
+				return offset;
+			}
+			
 			template <std::size_t M>
 			std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
 				return Imaging::byte_offset(pixel_byte_size(), stride, coordinates);
@@ -118,24 +137,12 @@ namespace Dream {
 			template <typename PointerType>
 			std::vector<PointerType> generate_row_pointers(PointerType data) {
 				std::vector<PointerType> row_pointers;
-				SizeType offset = ZERO;
 				
-				append_row_pointers(data, offset, row_pointers);
+				each_coordinate([&](const SizeType & offset){
+					row_pointers.push_back(data + byte_offset(offset));
+				}, 1);
 				
 				return row_pointers;
-			}
-			
-		private:
-			template <typename PointerType>
-			void append_row_pointers(PointerType data, SizeType & offset, std::vector<PointerType> & pointers, std::size_t n = N - 1)
-			{
-				if (n == 0) {
-					pointers.push_back(data + byte_offset(offset));
-				} else {
-					for (offset[n] = 0; offset[n] < size[n]; offset[n] += 1) {
-						append_row_pointers(data, offset, pointers, n - 1);
-					}
-				}
 			}
 		};
 
