@@ -8,13 +8,28 @@ Dream Imaging provides image loading, saving and manipulation.
 
 `Dream::Imaging` provides a few useful classes for dealing with pixel data: `Dream::Imaging::PixelBuffer` which has an associated `Dream::Imaging::PixelBufferLayout`, and `Dream::Imaging::Image` represents a typical 2D image.
 
-`Dream::Imaging::Image` can be loaded by `Dream::Resources::Loader`, but can also be loaded and saved directly:
+### Loading
 
-```c++
-auto input_data = ref(new Dream::Core::LocalFileData(path));
-auto image = Image::load_from_data(input_data);
-auto output_data = Image::save_to_data(image);
-```
+You can load an image using data:
+
+	Ref<IData> data = new LocalFileData("image.png");
+	Ref<Image> image = Image::load(data);
+	log("Image size:", image.size());
+
+An image cannot be used directly but must be converted to a pixel buffer with a specific layout:
+
+	PixelLayout2D layout(image.size());
+	PixelBuffer2D pixel_buffer(layout);
+	image->convert(layout, pixel_buffer.data());
+
+This will read the image data and convert it into the pixel buffer. This is done because the layout may have alignment requirements, e.g. row stride. This guarantees also the output format, even if the input format was, for example, only RGB. This is handled internally as efficiently as possible.
+
+### Saving
+
+You can save a pixel buffer using specific save methods exposed by the various file format classes.
+
+	Ref<IData> output_data = PNGImage::save(pixel_buffer.layout, pixel_buffer.data());
+	output_data->buffer->write_to_path("output.png");
 
 ## Contributing
 

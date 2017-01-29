@@ -1,8 +1,8 @@
 language: cpp
 sudo: false
 script:
-  - teapot -c test fetch
-  - teapot -c test build Test/DreamImaging
+  - teapot -c development fetch
+  - teapot -c development build Test/DreamImaging
 compiler: clang
 addons:
   apt:

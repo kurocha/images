@@ -28,6 +28,7 @@ define_target "dream-imaging" do |target|
 
 	target.depends "Library/png"
 	target.depends "Library/jpeg"
+	target.depends "Library/webp"
 	
 	target.depends "Library/Euclid"
 	
@@ -38,7 +39,7 @@ end
 
 define_target "dream-imaging-tests" do |target|
 	target.build do
-		copy test_assets: target.package.path.glob('test/**/*.{png,jpg}')
+		copy test_assets: target.package.path.glob('test/**/*.{png,jpg,webp}')
 		
 		run tests: "DreamImaging", source_files: target.package.path.glob('test/Dream/**/*.cpp')
 	end
@@ -55,15 +56,18 @@ define_configuration "dream-imaging" do |configuration|
 	configuration.require "dream"
 	configuration.require "png"
 	configuration.require "jpeg"
+	configuration.require "webp"
 end
 
-define_configuration "test" do |configuration|
+define_configuration "development" do |configuration|
 	configuration[:source] = "https://github.com/kurocha"
 	
 	configuration.require "platforms"
 	configuration.require "build-cmake"
 	configuration.require "build-make"
 	configuration.require "unit-test"
+	
+	configuration.require "language-cpp-class"
 	
 	configuration.require "platforms"
 	configuration.require "dream-resources"

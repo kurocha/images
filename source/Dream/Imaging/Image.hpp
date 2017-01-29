@@ -42,6 +42,8 @@ namespace Dream {
 			Image(Ptr<IData> data);
 			virtual ~Image();
 			
+			static Ref<Image> load(Ref<IData> data);
+			
 			const SizeType & size() const { return _size; }
 			virtual void convert(PixelBufferLayout2D _layout, Byte * data) const = 0;
 		};

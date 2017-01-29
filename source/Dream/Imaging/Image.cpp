@@ -12,6 +12,7 @@
 
 #include "PNGImage.hpp"
 #include "JPEGImage.hpp"
+#include "WebPImage.hpp"
 
 namespace Dream {
 	namespace Imaging {
@@ -33,17 +34,20 @@ namespace Dream {
 		*/
 		
 		enum class ImageType {
-			UNKNOWN, JPEG, PNG
+			UNKNOWN, JPEG, PNG, WEBP
 		};
 		
 		static ImageType read_image_type(const Buffer & buffer) {
-			if (buffer.size() < 4) return ImageType::UNKNOWN;
+			auto size = buffer.size();
 			
-			if (buffer[0] == 0xFF && buffer[1] == 0xD8)
+			if (size >= 2 && buffer[0] == 0xFF && buffer[1] == 0xD8)
 				return ImageType::JPEG;
 			
-			if (buffer[0] == 0x89 && buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G')
+			if (size >= 4 && buffer[0] == 0x89 && buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G')
 				return ImageType::PNG;
+			
+			if (size >= 12 && buffer[0] == 'R' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == 'F' && buffer[8] == 'W' && buffer[9] == 'E' && buffer[10] == 'B' && buffer[11] == 'P')
+				return ImageType::WEBP;
 			
 			return ImageType::UNKNOWN;
 		}
@@ -56,23 +60,34 @@ namespace Dream {
 		{
 			if (auto data = load_next(path, top).as<IData>())
 			{
-				switch (read_image_type(*data->buffer())) {
-					case ImageType::PNG:
-						return new PNGImage(data);
-					case ImageType::JPEG:
-						return new JPEGImage(data);
-				}
+				return Image::load(data);
 			}
 			
 			return nullptr;
 		}
-
+		
 		Image::Image(Ptr<IData> data) : _data(data), _size(ZERO)
 		{
 		}
-
+		
 		Image::~Image ()
 		{
+		}
+		
+		Ref<Image> Image::load(Ref<IData> data)
+		{
+			switch (read_image_type(*data->buffer())) {
+				case ImageType::PNG:
+					return new PNGImage(data);
+				case ImageType::JPEG:
+					return new JPEGImage(data);
+				case ImageType::WEBP:
+					return new WebPImage(data);
+				case ImageType::UNKNOWN:
+					return nullptr;
+			}
+			
+			return nullptr;
 		}
 	}
 }
