@@ -17,7 +17,6 @@ namespace Dream
 		UnitTest::Suite WebPImageTestSuite {
 			"Dream::Imaging::WebPImage",
 			
-			
 			{"can load file and size is correct",
 				[](UnitTest::Examiner & examiner) {
 					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/test.webp");

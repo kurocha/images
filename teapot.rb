@@ -39,9 +39,11 @@ end
 
 define_target "dream-imaging-tests" do |target|
 	target.build do
-		copy test_assets: target.package.path.glob('test/**/*.{png,jpg,webp}')
+		test_root = target.package.path + 'test'
 		
-		run tests: "DreamImaging", source_files: target.package.path.glob('test/Dream/**/*.cpp')
+		copy test_assets: test_root.glob('**/*.{png,jpg,webp}')
+		
+		run tests: "DreamImaging", source_files: test_root.glob('Dream/**/*.cpp')
 	end
 	
 	target.depends "Library/DreamImaging"
