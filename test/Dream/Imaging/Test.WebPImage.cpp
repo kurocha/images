@@ -59,6 +59,8 @@ namespace Dream
 					Ref<WebPImage> output_image = new WebPImage(output_data);
 					examiner << "Output image has same size as input" << std::endl;
 					examiner.expect(output_image->size()) == image->size();
+					
+					//output_data->buffer()->write_to_file("output1.webp");
 				}
 			},
 			
@@ -79,6 +81,8 @@ namespace Dream
 					Ref<WebPImage> output_image = new WebPImage(output_data);
 					examiner << "Output image has same size as input" << std::endl;
 					examiner.expect(output_image->size()) == image->size();
+					
+					//output_data->buffer()->write_to_file("output2.webp");
 				}
 			},
 		};
