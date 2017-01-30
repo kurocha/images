@@ -8,6 +8,8 @@
 
 #include "WebPImage.hpp"
 
+#include <Buffers/ForeignBuffer.hpp>
+
 #include <webp/encode.h>
 #include <webp/decode.h>
 
@@ -47,7 +49,28 @@ namespace Dream
 		
 		Ref<IData> WebPImage::save(PixelBufferLayout2D layout, const Byte * data)
 		{
-			return nullptr;
+			Byte * output_data = nullptr;
+			
+			auto output_size = WebPEncodeLosslessRGBA(data, layout.size[0], layout.size[1], layout.stride[0], &output_data);
+			
+			if (output_data) {
+				return new BufferedData(new ForeignBuffer<void, WebPFree>(output_data, output_size));
+			} else {
+				return nullptr;
+			}
+		}
+		
+		Ref<IData> WebPImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor)
+		{
+			Byte * output_data = nullptr;
+			
+			auto output_size = WebPEncodeRGBA(data, layout.size[0], layout.size[1], layout.stride[0], quality_factor, &output_data);
+			
+			if (output_data) {
+				return new BufferedData(new ForeignBuffer<void, WebPFree>(output_data, output_size));
+			} else {
+				return nullptr;
+			}
 		}
 	}
 }

@@ -22,7 +22,11 @@ namespace Dream
 			
 			virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
 			
+			// Lossless encoding:
 			static Ref<IData> save(PixelBufferLayout2D layout, const Byte * data);
+			
+			// Lossy encoding, quality from 0 to 100.
+			static Ref<IData> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor);
 		};
 	}
 }

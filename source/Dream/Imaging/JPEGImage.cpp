@@ -8,6 +8,8 @@
 
 #include "JPEGImage.hpp"
 
+#include <Buffers/ForeignBuffer.hpp>
+
 namespace Dream
 {
 	namespace Imaging
@@ -57,13 +59,14 @@ namespace Dream
 			tjhandle compressor = tjInitCompress();
 
 			tjCompress2(compressor, data, layout.size[WIDTH], layout.stride[0], layout.size[HEIGHT], TJPF_RGBX, &output_data, &output_size, TJSAMP_444, quality, TJFLAG_FASTDCT);
-
-			Ref<IData> output = new BufferedData(output_data, output_size);
-
-			tjDestroy(compressor);
-			tjFree(output_data);
 			
-			return output;
+			tjDestroy(compressor);
+			
+			if (output_data) {
+				return new BufferedData(new ForeignBuffer<Byte, tjFree>(output_data, output_size));
+			} else {
+				return nullptr;
+			}
 		}
 	}
 }

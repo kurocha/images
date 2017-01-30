@@ -42,25 +42,45 @@ namespace Dream
 			// 	}
 			// },
 			// 
-			// {"can save to RGB data",
-			// 	[](UnitTest::Examiner & examiner) {
-			// 		Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/9452-v2.jpg");
-			// 		Ref<JPEGImage> image = new JPEGImage(data);
-			// 		
-			// 		PixelBufferLayout2D pixel_layout{image->size()};
-			// 		Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
-			// 		image->convert(pixel_layout, pixel_buffer->data());
-			// 		
-			// 		Ref<IData> output_data = JPEGImage::save(pixel_layout, pixel_buffer->data());
-			// 		
-			// 		examiner << "Output data was generated." << std::endl;
-			// 		examiner.expect(output_data->size()) > 0;
-			// 		
-			// 		Ref<JPEGImage> output_image = new JPEGImage(output_data);
-			// 		examiner << "Output image has same size as input" << std::endl;
-			// 		examiner.expect(output_image->size()) == image->size();
-			// 	}
-			// },
+			{"can save to lossless RGBA data",
+				[](UnitTest::Examiner & examiner) {
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/test.webp");
+					Ref<WebPImage> image = new WebPImage(data);
+					
+					PixelBufferLayout2D pixel_layout{image->size()};
+					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
+					image->convert(pixel_layout, pixel_buffer->data());
+					
+					Ref<IData> output_data = WebPImage::save(pixel_layout, pixel_buffer->data());
+					
+					examiner << "Output data was generated." << std::endl;
+					examiner.expect(output_data->size()) > 0;
+					
+					Ref<WebPImage> output_image = new WebPImage(output_data);
+					examiner << "Output image has same size as input" << std::endl;
+					examiner.expect(output_image->size()) == image->size();
+				}
+			},
+			
+			{"can save to lossy RGBA data",
+				[](UnitTest::Examiner & examiner) {
+					Ref<IData> data = new Core::LocalFileData("test/Dream/Imaging/test.webp");
+					Ref<WebPImage> image = new WebPImage(data);
+					
+					PixelBufferLayout2D pixel_layout{image->size()};
+					Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
+					image->convert(pixel_layout, pixel_buffer->data());
+					
+					Ref<IData> output_data = WebPImage::save(pixel_layout, pixel_buffer->data(), 75);
+					
+					examiner << "Output data was generated." << std::endl;
+					examiner.expect(output_data->size()) > 0;
+					
+					Ref<WebPImage> output_image = new WebPImage(output_data);
+					examiner << "Output image has same size as input" << std::endl;
+					examiner.expect(output_image->size()) == image->size();
+				}
+			},
 		};
 	}
 }
