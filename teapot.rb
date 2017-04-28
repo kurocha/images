@@ -3,7 +3,7 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-teapot_version "1.0.0"
+teapot_version "1.3"
 
 define_project "Dream Imaging" do |project|
 	project.add_author "Samuel Williams"
@@ -24,7 +24,7 @@ define_target "dream-imaging" do |target|
 	target.depends "Library/Dream"
 	target.depends "Library/DreamResources"
 	
-	target.depends "Language/C++11"
+	target.depends "Language/C++11", private: true
 
 	target.depends "Library/png"
 	target.depends "Library/jpeg"
@@ -46,6 +46,8 @@ define_target "dream-imaging-tests" do |target|
 	
 	target.depends "Library/DreamImaging"
 	target.depends "Library/UnitTest"
+	
+	target.depends "Language/C++11", private: true
 	
 	target.provides "Test/DreamImaging"
 end
