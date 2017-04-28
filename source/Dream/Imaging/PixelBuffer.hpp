@@ -129,6 +129,14 @@ namespace Dream {
 				return offset;
 			}
 			
+			// Apply a function to every pixel in the given pixel buffer.
+			template <typename FunctionT, typename PixelBufferT>
+			void apply(PixelBufferT & pixel_buffer, FunctionT function) {
+				each_coordinate([&](const SizeType & coordinate){
+					pixel_buffer[coordinate] = function(pixel_buffer[coordinate]);
+				});
+			}
+			
 			template <std::size_t M>
 			std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
 				return Imaging::byte_offset(pixel_byte_size(), stride, coordinates);
