@@ -42,7 +42,7 @@ namespace Images
 		
 		{"can load RGB file and convert to RGBA pixel buffer",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
+				auto data = owned<Resources::FileData>("Images/fixtures/RGB.png");
 				auto image = owned<PNGImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
