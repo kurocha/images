@@ -14,7 +14,7 @@ namespace Images
 		{"PixelBuffer Initialization",
 			[](UnitTest::Examiner & examiner) {
 				PixelBufferLayout2D pixel_layout(PixelBufferLayout2D::SizeType{8, 8});
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 
 				examiner << "Image data was allocated" << std::endl;
 				examiner.check_equal(pixel_buffer->buffer().size(), 8*8*4);
@@ -29,7 +29,7 @@ namespace Images
 
 				examiner.check_equal(pixel, white);
 
-				Own<Image> small_black_image = new Image({4, 4}, PixelFormat::L, DataType::BYTE);
+				Owned<Image> small_black_image = new Image({4, 4}, PixelFormat::L, DataType::BYTE);
 				small_black_image->fill(0);
 
 				examiner << "Copy black image into corner of white image" << std::endl;
@@ -49,7 +49,7 @@ namespace Images
 /*
 		{"Pixel Writer",
 			[](UnitTest::Examiner & examiner) {
-				Own<Image> image = new Image({8, 8}, PixelFormat::RGB, DataType::BYTE);
+				Owned<Image> image = new Image({8, 8}, PixelFormat::RGB, DataType::BYTE);
 
 				examiner << "Image data was allocated" << std::endl;
 				examiner.check_equal(image->buffer().size(), 8*8*3);

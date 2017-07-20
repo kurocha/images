@@ -45,27 +45,27 @@ namespace Images
 		if (result == nullptr) throw std::runtime_error("WebP decoder failed to convert image!");
 	}
 	
-	Own<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data)
+	Owned<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data)
 	{
 		Byte * output_data = nullptr;
 		
 		auto output_size = WebPEncodeLosslessRGBA(data, layout.size[0], layout.size[1], layout.stride[0], &output_data);
 		
 		if (output_data) {
-			return owner<BufferedData>(shared<ForeignBuffer<void, WebPFree>>(output_data, output_size));
+			return owned<BufferedData>(shared<ForeignBuffer<void, WebPFree>>(output_data, output_size));
 		} else {
 			return nullptr;
 		}
 	}
 	
-	Own<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor)
+	Owned<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor)
 	{
 		Byte * output_data = nullptr;
 		
 		auto output_size = WebPEncodeRGBA(data, layout.size[0], layout.size[1], layout.stride[0], quality_factor, &output_data);
 		
 		if (output_data) {
-			return owner<BufferedData>(shared<ForeignBuffer<void, WebPFree>>(output_data, output_size));
+			return owned<BufferedData>(shared<ForeignBuffer<void, WebPFree>>(output_data, output_size));
 		} else {
 			return nullptr;
 		}

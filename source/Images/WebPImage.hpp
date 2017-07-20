@@ -21,9 +21,9 @@ namespace Images
 		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
 		
 		// Lossless encoding:
-		static Own<Data> save(PixelBufferLayout2D layout, const Byte * data);
+		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data);
 		
 		// Lossy encoding, quality from 0 to 100.
-		static Own<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor);
+		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor);
 	};
 }

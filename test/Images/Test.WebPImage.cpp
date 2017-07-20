@@ -18,8 +18,8 @@ namespace Images
 		
 		{"can load file and size is correct",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/test.webp");
-				auto image = owner<WebPImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/test.webp");
+				auto image = owned<WebPImage>(data);
 				
 				examiner << "Width and size should be loaded correctly" << std::endl;
 				examiner.expect(image->size()) == Vec3u{320, 241, 1};
@@ -28,7 +28,7 @@ namespace Images
 		
 		// {"can load file and convert to pixel buffer",
 		// 	[](UnitTest::Examiner & examiner) {
-		// 		Own<Data> data = new Core::LocalFileData("test/Images/9452-v2.jpg");
+		// 		Owned<Data> data = new Core::LocalFileData("test/Images/9452-v2.jpg");
 		// 		Ref<JPEGImage> image = new JPEGImage(data);
 		// 		
 		// 		PixelBufferLayout2D pixel_layout{image->size()};
@@ -42,11 +42,11 @@ namespace Images
 		// 
 		{"can save to lossless RGBA data",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/test.webp");
-				auto image = owner<WebPImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/test.webp");
+				auto image = owned<WebPImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
 				auto output_data = WebPImage::save(pixel_layout, pixel_buffer->data());
@@ -54,7 +54,7 @@ namespace Images
 				examiner << "Output data was generated." << std::endl;
 				examiner.expect(output_data->size()) > 0;
 				
-				auto output_image = owner<WebPImage>(output_data);
+				auto output_image = owned<WebPImage>(output_data);
 				examiner << "Output image has same size as input" << std::endl;
 				examiner.expect(output_image->size()) == image->size();
 				
@@ -64,11 +64,11 @@ namespace Images
 		
 		{"can save to lossy RGBA data",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/test.webp");
-				auto image = owner<WebPImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/test.webp");
+				auto image = owned<WebPImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
 				auto output_data = WebPImage::save(pixel_layout, pixel_buffer->data(), 75);
@@ -76,7 +76,7 @@ namespace Images
 				examiner << "Output data was generated." << std::endl;
 				examiner.expect(output_data->size()) > 0;
 				
-				auto output_image = owner<WebPImage>(output_data);
+				auto output_image = owned<WebPImage>(output_data);
 				examiner << "Output image has same size as input" << std::endl;
 				examiner.expect(output_image->size()) == image->size();
 				

@@ -13,7 +13,7 @@
 
 #include <Buffers/DynamicBuffer.hpp>
 #include <Memory/Object.hpp>
-#include <Memory/Owner.hpp>
+#include <Memory/Owned.hpp>
 
 namespace Images
 {

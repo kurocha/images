@@ -48,7 +48,7 @@ namespace Images
 		);
 	}
 	
-	Own<Data> JPEGImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality)
+	Owned<Data> JPEGImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality)
 	{
 		if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("JPEG requires SRGB color space!");
 		
@@ -62,7 +62,7 @@ namespace Images
 		tjDestroy(compressor);
 		
 		if (output_data) {
-			return owner<Resources::BufferedData>(shared<ForeignBuffer<Byte, tjFree>>(output_data, output_size));
+			return owned<Resources::BufferedData>(shared<ForeignBuffer<Byte, tjFree>>(output_data, output_size));
 		} else {
 			return nullptr;
 		}

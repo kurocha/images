@@ -24,7 +24,7 @@ namespace Images
 		
 		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
 		
-		static Own<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality = 75);
+		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality = 75);
 		
 	private:
 		tjhandle _decompressor;

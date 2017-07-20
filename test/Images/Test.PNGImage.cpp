@@ -18,8 +18,8 @@ namespace Images
 		
 		{"can load file and size is correct",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/Dream.png");
-				auto image = owner<PNGImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
+				auto image = owned<PNGImage>(data);
 				
 				examiner << "Width and size should be loaded correctly" << std::endl;
 				examiner.expect(image->size()) == Vec3u{144, 144, 1};
@@ -28,11 +28,11 @@ namespace Images
 		
 		{"can load file and convert to pixel buffer",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/Dream.png");
-				auto image = owner<PNGImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
+				auto image = owned<PNGImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
@@ -42,11 +42,11 @@ namespace Images
 		
 		{"can load RGB file and convert to RGBA pixel buffer",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/Dream.png");
-				auto image = owner<PNGImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
+				auto image = owned<PNGImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
@@ -60,11 +60,11 @@ namespace Images
 		
 		{"can save to RGBA data",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owner<Resources::FileData>("Images/fixtures/Dream.png");
-				auto image = owner<PNGImage>(data);
+				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
+				auto image = owned<PNGImage>(data);
 				
 				PixelBufferLayout2D pixel_layout{image->size()};
-				auto pixel_buffer = owner<PixelBuffer2D>(pixel_layout);
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
 				auto output_data = PNGImage::save(pixel_layout, pixel_buffer->data());
@@ -72,7 +72,7 @@ namespace Images
 				examiner << "Output data was generated." << std::endl;
 				examiner.expect(output_data->size()) > 0;
 				
-				auto output_image = owner<PNGImage>(output_data);
+				auto output_image = owned<PNGImage>(output_data);
 				examiner << "Output image has same size as input" << std::endl;
 				examiner.expect(output_image->size()) == image->size();
 			}

@@ -32,20 +32,20 @@ namespace Images
 			using ChainLoader::ChainLoader;
 			virtual ~Loader();
 			
-			virtual Own<Image> load(const URI::Generic & uri) const;
+			virtual Owned<Image> load(const URI::Generic & uri) const;
 		};
 		
 		typedef Vector<3, std::size_t> SizeType;
 		
 	protected:
-		Own<Data> _data;
+		Owned<Data> _data;
 		SizeType _size;
 		
 	public:
 		Image(Data * data);
 		virtual ~Image();
 		
-		static Own<Image> load(Data * data);
+		static Owned<Image> load(Data * data);
 		
 		const SizeType & size() const { return _size; }
 		virtual void convert(PixelBufferLayout2D _layout, Byte * data) const = 0;

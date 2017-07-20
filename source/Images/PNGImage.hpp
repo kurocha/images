@@ -20,6 +20,6 @@ namespace Images
 		
 		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
 		
-		static Own<Data> save(PixelBufferLayout2D layout, const Byte * data);
+		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data);
 	};
 }

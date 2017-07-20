@@ -182,7 +182,7 @@ namespace Images
 		buffer->append(length, data);
 	}
 
-	Own<Data> PNGImage::save(PixelBufferLayout2D layout, const Byte * data)
+	Owned<Data> PNGImage::save(PixelBufferLayout2D layout, const Byte * data)
 	{
 		// Structures to process the image:
 		png_structp png_writer = nullptr;
@@ -239,6 +239,6 @@ namespace Images
 
 		png_destroy_write_struct(&png_writer, &png_info);
 
-		return owner<BufferedData>(result_data);
+		return owned<BufferedData>(result_data);
 	}
 }

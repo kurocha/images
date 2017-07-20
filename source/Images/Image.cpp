@@ -56,7 +56,7 @@ namespace Images {
 	{
 	}
 	
-	Own<Image> Image::Loader::load(const URI::Generic & uri) const
+	Owned<Image> Image::Loader::load(const URI::Generic & uri) const
 	{
 		if (auto data = load_next(uri)) {
 			return Image::load(data);
@@ -73,7 +73,7 @@ namespace Images {
 	{
 	}
 	
-	Own<Image> Image::load(Data * data)
+	Owned<Image> Image::load(Data * data)
 	{
 		switch (read_image_type(data)) {
 			case ImageType::PNG:
