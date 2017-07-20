@@ -1,8 +1,30 @@
-# Dream Imaging
+# Images
 
-Dream Imaging provides image loading, saving and manipulation.
+Provides image loading, saving and manipulation.
 
-[![Build Status](https://secure.travis-ci.org/kurocha/dream-imaging.svg)](http://travis-ci.org/kurocha/dream-imaging)
+[![Build Status](https://travis-ci.org/kurocha/images.svg?branch=master)](https://travis-ci.org/kurocha/images)
+
+## Setup
+
+The build tool `teapot` needs to be installed (which requires [Ruby][2]):
+
+	$ gem install teapot
+
+[2]: http://www.ruby-lang.org/en/downloads/
+
+### Install Dependencies
+
+To fetch project dependencies, run the following:
+
+	$ cd images
+	$ teapot fetch
+
+### Validate Behaviour
+
+The project can be checked by running unit tests:
+
+	$ cd images
+	$ teapot Test/Images
 
 ## Usage
 
@@ -12,9 +34,9 @@ Dream Imaging provides image loading, saving and manipulation.
 
 You can load an image using data:
 
-	Ref<IData> data = new LocalFileData("image.png");
-	Ref<Image> image = Image::load(data);
-	log("Image size:", image.size());
+	auto data = owner<Resources::FileData>("Images/fixtures/Dream.png");
+	auto image = owner<PNGImage>(data);
+	log("Image size:", image->size());
 
 An image cannot be used directly but must be converted to a pixel buffer with a specific layout:
 
@@ -28,7 +50,7 @@ This will read the image data and convert it into the pixel buffer. This is done
 
 You can save a pixel buffer using specific save methods exposed by the various file format classes.
 
-	Ref<IData> output_data = PNGImage::save(pixel_buffer.layout, pixel_buffer.data());
+	auto output_data = PNGImage::save(pixel_buffer.layout, pixel_buffer.data());
 	output_data->buffer->write_to_path("output.png");
 
 ## Contributing
@@ -43,7 +65,7 @@ You can save a pixel buffer using specific save methods exposed by the various f
 
 Released under the MIT license.
 
-Copyright, 2013, by [Samuel G. D. Williams](http://www.codeotaku.com/samuel-williams).
+Copyright, 2017, by [Samuel G. D. Williams](http://www.codeotaku.com/samuel-williams).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -3,77 +3,103 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-teapot_version "1.3"
+teapot_version "2.0"
 
-define_project "Dream Imaging" do |project|
+# Project Metadata
+
+define_project "images" do |project|
+	project.title = "Images"
+	project.summary = 'Load and save images using pixel buffers.'
+	
 	project.add_author "Samuel Williams"
+	
 	project.license = "MIT License"
 	
-	project.version = "0.1.0"
+	project.add_author 'Samuel Williams', email: 'samuel.williams@oriontransfer.co.nz'
+	
+	project.version = "1.0.0"
 end
 
-define_target "dream-imaging" do |target|
+# Build Targets
+
+define_target 'images-library' do |target|
 	target.build do
 		source_root = target.package.path + 'source'
 		
-		copy headers: source_root.glob('Dream/**/*.{h,hpp}')
+		copy headers: source_root.glob('Images/**/*.{h,hpp}')
 		
-		build static_library: "DreamImaging", source_files: source_root.glob('Dream/**/*.cpp')
+		build static_library: "Images", source_files: source_root.glob('Images/**/*.cpp')
 	end
 	
-	target.depends "Library/Dream"
-	target.depends "Library/DreamResources"
+	target.depends 'Build/Files'
+	target.depends 'Build/Clang'
 	
+	target.depends :platform
 	target.depends "Language/C++11", private: true
-
+	
+	target.depends "Library/Memory"
+	target.depends "Library/Resources"
+	
 	target.depends "Library/png"
 	target.depends "Library/jpeg"
 	target.depends "Library/webp"
 	
 	target.depends "Library/Euclid"
 	
-	target.provides "Library/DreamImaging" do
-		append linkflags {install_prefix + "lib/libDreamImaging.a"}
+	target.provides "Library/Images" do
+		append linkflags [
+			->{install_prefix + 'lib/libImages.a'},
+		]
 	end
 end
 
-define_target "dream-imaging-tests" do |target|
-	target.build do
+define_target "images-tests" do |target|
+	target.build do |*arguments|
 		test_root = target.package.path + 'test'
 		
-		copy test_assets: test_root.glob('**/*.{png,jpg,webp}')
+		copy test_assets: test_root.glob('**/fixtures/**/*')
 		
-		run tests: "DreamImaging", source_files: test_root.glob('Dream/**/*.cpp')
+		run tests: 'Images', source_files: test_root.glob('Images/**/*.cpp'), arguments: arguments
 	end
 	
-	target.depends "Library/DreamImaging"
 	target.depends "Library/UnitTest"
+	target.depends 'Library/Images'
 	
 	target.depends "Language/C++11", private: true
 	
-	target.provides "Test/DreamImaging"
+	target.provides 'Test/Images'
 end
 
-define_configuration "dream-imaging" do |configuration|
-	configuration.public!
-	
-	configuration.require "dream"
-	configuration.require "png"
-	configuration.require "jpeg"
-	configuration.require "webp"
-end
+# Configurations
 
 define_configuration "development" do |configuration|
 	configuration[:source] = "https://github.com/kurocha"
+	configuration.import "images"
 	
+	# Provides all the build related infrastructure:
 	configuration.require "platforms"
 	configuration.require "build-cmake"
 	configuration.require "build-make"
+	
+	# Provides unit testing infrastructure and generators:
 	configuration.require "unit-test"
 	
-	configuration.require "language-cpp-class"
+	# Provides some useful C++ generators:
+	configuration.require "generate-cpp-class"
 	
 	configuration.require "platforms"
-	configuration.require "dream-resources"
-	configuration.import "dream-imaging"
+	
+	configuration.require "generate-project"
+	configuration.require "generate-travis"
+end
+
+define_configuration "images" do |configuration|
+	configuration.public!
+	
+	configuration.require "euclid"
+	configuration.require "resources"
+	
+	configuration.require "png"
+	configuration.require "jpeg"
+	configuration.require "webp"
 end
