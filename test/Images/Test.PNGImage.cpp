@@ -1,6 +1,6 @@
 //
 //  PNGImage.cpp
-//  This file is part of the "Dream Images" project and released under the MIT License.
+//  This file is part of the "Images" project and released under the MIT License.
 //
 //  Created by Samuel Williams on 19/4/2016.
 //  Copyright, 2016, by Samuel Williams. All rights reserved.
@@ -14,7 +14,7 @@
 namespace Images
 {
 	UnitTest::Suite PNGImageTestSuite {
-		"Dream::Images::PNGImage",
+		"Images::PNGImage",
 		
 		{"can load file and size is correct",
 			[](UnitTest::Examiner & examiner) {

@@ -1,6 +1,6 @@
 //
 //  Test.WebPImage.cpp
-//  This file is part of the "Dream Imaging" project and released under the MIT License.
+//  This file is part of the "Images" project and released under the MIT License.
 //
 //  Created by Samuel Williams on 30/1/2017.
 //  Copyright, 2017, by Samuel Williams. All rights reserved.
