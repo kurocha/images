@@ -19,6 +19,8 @@
 
 namespace Dream {
 	namespace Imaging {
+		typedef unsigned char Byte;
+		
 		using namespace Euclid::Numerics;
 
 		/// Image pixel formats.
