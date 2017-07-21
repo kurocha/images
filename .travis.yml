@@ -2,6 +2,11 @@
 sudo: false
 dist: trusty
 
+addons:
+  apt:
+    packages: &global_packages
+      - nasm
+
 # Setup the compilers:
 matrix:
   include:
@@ -11,6 +16,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - *global_packages
             - g++-5
       env: CC=gcc-5 CXX=g++-5 TARGETS="compiler-gcc"
     - compiler: gcc
@@ -19,6 +25,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - *global_packages
             - g++-6
       env: CC=gcc-6 CXX=g++-6 TARGETS="compiler-gcc"
     - compiler: clang
@@ -28,6 +35,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
           packages:
+            - *global_packages
             - clang-3.6
             - libc++-dev
             - libc++abi-dev
@@ -40,6 +48,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.7
           packages:
+            - *global_packages
             - clang-3.7
             - libc++-dev
             - libc++abi-dev
@@ -52,6 +61,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.8
           packages:
+            - *global_packages
             - clang-3.8
             - libc++-dev
             - libc++abi-dev
@@ -64,6 +74,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-3.9
           packages:
+            - *global_packages
             - clang-3.9
             - libc++-dev
             - libc++abi-dev
@@ -76,6 +87,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-4.0
           packages:
+            - *global_packages
             - clang-4.0
             - libc++-dev
             - libc++abi-dev
