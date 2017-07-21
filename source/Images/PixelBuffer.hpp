@@ -15,6 +15,8 @@
 #include <Memory/Object.hpp>
 #include <Memory/Owned.hpp>
 
+#include <vector>
+
 namespace Images
 {
 	using namespace Memory;
