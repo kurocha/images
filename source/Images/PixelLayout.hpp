@@ -46,7 +46,7 @@ namespace Images
 	}
 	
 	/// The layout of pixels in a buffer. Things which affect the actual pixel 
-	template <typename PixelFormatT = PixelFormat::RGBA, std::size_t N = 2>
+	template <typename PixelFormatT = PixelFormat::RGBA8, std::size_t N = 2>
 	struct PixelLayout {
 		using Size = Euclid::Numerics::Vector<N, std::size_t>;
 		using PixelFormat = PixelFormatT;
@@ -61,12 +61,18 @@ namespace Images
 			return stride.back();
 		}
 		
+		template <typename PixelFormatT>
+		PixelLayout(const PixelLayout<PixelFormatT, N> & other) : size(other.size), stride(other.stride)
+		{
+			static_assert(pixel_size() == other.pixel_size(), "Pixel elements must have same size");
+		}
+		
 		template <typename StrideType>
-		PixelBufferLayout(const Size & _size, const StrideType & _stride) : size(_size), stride(calculate_stride(_size, _stride))
+		PixelLayout(const Size & _size, const StrideType & _stride) : size(_size), stride(calculate_stride(_size, _stride))
 		{
 		}
 		
-		PixelBufferLayout(const Size & _size) : size(_size), stride(calculate_stride(_size, pixel_size()))
+		PixelLayout(const Size & _size) : size(_size), stride(calculate_stride(_size, pixel_size()))
 		{
 		}
 		
@@ -94,6 +100,15 @@ namespace Images
 		void apply(PixelBufferT & pixel_buffer, FunctionT function) {
 			each_coordinate([&](const Size & coordinate){
 				pixel_buffer[coordinate] = function(pixel_buffer[coordinate]);
+			});
+		}
+		
+		// Convert pixel format into a new buffer.
+		template <typename PixelFormatT, typename InputBufferT, typename OutputBufferT>
+		void convert(const PixelLayout<PixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output)
+		{
+			each_coordinate([&](const Size & coordinate){
+				output[coordinate] = input[coordinate];
 			});
 		}
 		

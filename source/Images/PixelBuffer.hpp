@@ -23,21 +23,17 @@ namespace Images
 	
 	// A pixel buffer is a container for pixel data along with a layout that allows for interpretation of the buffer contents. This typically includes a pixel format which describes the layout of colour channels within an individual pixel element, a data type which describes the storage for each pixel component and a size which describes the organisation of pixel data into rows and columns and potentially other dimensions.
 	template <typename PixelLayoutT>
-	class PixelBuffer : public Object {
+	class PixelBuffer {
 	protected:
 		PixelLayoutT _layout;
-		Buffers::DynamicBuffer _buffer;
-
-		void resize() {
-			_buffer.resize(_layout.data_size());
-		}
-
+		const Byte * _data;
+		
 	public:
 		using Byte = unsigned char;
 		using Size = typename PixelLayoutT::Size;
 		using PixelFormat = PixelLayoutT::PixelFormat;
 		
-		PixelBuffer (const PixelBufferLayoutType & layout) : _layout(layout) { resize(); }
+		PixelBuffer (const PixelLayoutT & layout, Byte * data) : _layout(layout) { resize(); }
 		virtual ~PixelBuffer() {}
 		
 		const Buffers::MutableBuffer & buffer() const { return _buffer; }
