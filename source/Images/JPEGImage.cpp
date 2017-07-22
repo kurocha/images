@@ -17,13 +17,15 @@ namespace Images
 	{
 		_decompressor = tjInitDecompress();
 		
-		int jpegSubsamp, width, height;
+		int jpegSubsamp, width, height, jpegColorspace;
 		
-		tjDecompressHeader2(
+		tjDecompressHeader3(
 			_decompressor,
-			const_cast<Byte *>(data->begin()),
+			data->begin(),
 			data->size(),
-			&width, &height, &jpegSubsamp
+			&width, &height,
+			&jpegSubsamp,
+			&jpegColorspace
 		);
 		
 		_size = {width, height, 1};
@@ -34,7 +36,7 @@ namespace Images
 		tjDestroy(_decompressor);
 	}
 	
-	void JPEGImage::convert(PixelBufferLayout2D layout, Byte * data) const
+	void JPEGImage::convert(PixelLayout2D layout, Byte * data) const
 	{
 		if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("JPEG requires SRGB color space!");
 		
@@ -48,7 +50,7 @@ namespace Images
 		);
 	}
 	
-	Owned<Data> JPEGImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality)
+	Owned<Data> JPEGImage::save(PixelLayout2D layout, const Byte * data, std::uint32_t quality)
 	{
 		if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("JPEG requires SRGB color space!");
 		

@@ -166,7 +166,7 @@ namespace Images
 	{
 	}
 	
-	void PNGImage::convert(PixelBufferLayout2D _layout, Byte * data) const
+	void PNGImage::convert(PixelLayout2D _layout, Byte * data) const
 	{
 		PNGRowReader reader(_layout.color_space);
 		
@@ -182,7 +182,7 @@ namespace Images
 		buffer->append(length, data);
 	}
 
-	Owned<Data> PNGImage::save(PixelBufferLayout2D layout, const Byte * data)
+	Owned<Data> PNGImage::save(PixelLayout2D layout, const Byte * data)
 	{
 		// Structures to process the image:
 		png_structp png_writer = nullptr;

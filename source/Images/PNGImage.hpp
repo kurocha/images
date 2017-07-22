@@ -18,8 +18,8 @@ namespace Images
 		PNGImage(Data * data);
 		virtual ~PNGImage();
 		
-		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
+		virtual void convert(PixelLayout2D layout, Byte * data) const;
 		
-		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data);
+		static Owned<Data> save(PixelLayout2D layout, const Byte * data);
 	};
 }

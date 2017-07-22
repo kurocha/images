@@ -31,7 +31,7 @@ namespace Images
 				auto data = owned<Resources::FileData>("Images/fixtures/9452-v2.jpg");
 				auto image = owned<JPEGImage>(data);
 				
-				PixelBufferLayout2D pixel_layout{image->size()};
+				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
@@ -45,7 +45,7 @@ namespace Images
 				auto data = owned<Resources::FileData>("Images/fixtures/9452-v2.jpg");
 				auto image = owned<JPEGImage>(data);
 				
-				PixelBufferLayout2D pixel_layout{image->size()};
+				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				

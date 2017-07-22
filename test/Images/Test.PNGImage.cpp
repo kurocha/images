@@ -31,7 +31,7 @@ namespace Images
 				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
 				auto image = owned<PNGImage>(data);
 				
-				PixelBufferLayout2D pixel_layout{image->size()};
+				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
@@ -45,7 +45,7 @@ namespace Images
 				auto data = owned<Resources::FileData>("Images/fixtures/RGB.png");
 				auto image = owned<PNGImage>(data);
 				
-				PixelBufferLayout2D pixel_layout{image->size()};
+				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				
@@ -63,7 +63,7 @@ namespace Images
 				auto data = owned<Resources::FileData>("Images/fixtures/Dream.png");
 				auto image = owned<PNGImage>(data);
 				
-				PixelBufferLayout2D pixel_layout{image->size()};
+				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->convert(pixel_layout, pixel_buffer->data());
 				

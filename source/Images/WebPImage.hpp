@@ -18,12 +18,15 @@ namespace Images
 		WebPImage(Data * data);
 		virtual ~WebPImage();
 		
-		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
+		virtual void convert(PixelLayout<PixelFormat::RGBA8> layout, Byte * data) const;
+		virtual void convert(PixelLayout<PixelFormat::BGRA8> layout, Byte * data) const;
+		virtual void convert(PixelLayout<PixelFormat::RGB8> layout, Byte * data) const;
+		virtual void convert(PixelLayout<PixelFormat::BGR8> layout, Byte * data) const;
 		
 		// Lossless encoding:
-		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data);
+		static Owned<Data> save(PixelLayout2D layout, const Byte * data);
 		
 		// Lossy encoding, quality from 0 to 100.
-		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor);
+		static Owned<Data> save(PixelLayout2D layout, const Byte * data, std::uint32_t quality_factor);
 	};
 }

@@ -13,7 +13,7 @@ namespace Images
 
 		{"PixelBuffer Initialization",
 			[](UnitTest::Examiner & examiner) {
-				PixelBufferLayout2D pixel_layout(PixelBufferLayout2D::SizeType{8, 8});
+				PixelLayout2D pixel_layout(PixelLayout2D::Size{8, 8});
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 
 				examiner << "Image data was allocated" << std::endl;

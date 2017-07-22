@@ -32,7 +32,7 @@ namespace Images
 	{
 	}
 	
-	void WebPImage::convert(PixelBufferLayout2D layout, Byte * data) const
+	void WebPImage::convert(PixelLayout2D layout, Byte * data) const
 	{
 		if (layout.color_space != ColorSpace::SRGB) throw std::runtime_error("WebP requires SRGB color space!");
 		
@@ -45,7 +45,7 @@ namespace Images
 		if (result == nullptr) throw std::runtime_error("WebP decoder failed to convert image!");
 	}
 	
-	Owned<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data)
+	Owned<Data> WebPImage::save(PixelLayout2D layout, const Byte * data)
 	{
 		Byte * output_data = nullptr;
 		
@@ -58,7 +58,7 @@ namespace Images
 		}
 	}
 	
-	Owned<Data> WebPImage::save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality_factor)
+	Owned<Data> WebPImage::save(PixelLayout2D layout, const Byte * data, std::uint32_t quality_factor)
 	{
 		Byte * output_data = nullptr;
 		

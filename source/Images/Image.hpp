@@ -35,11 +35,11 @@ namespace Images
 			virtual Owned<Image> load(const URI::Generic & uri) const;
 		};
 		
-		typedef Vector<3, std::size_t> SizeType;
+		typedef Vector<3, std::size_t> Size;
 		
 	protected:
 		Owned<Data> _data;
-		SizeType _size;
+		Size _size;
 		
 	public:
 		Image(Data * data);
@@ -47,7 +47,7 @@ namespace Images
 		
 		static Owned<Image> load(Data * data);
 		
-		const SizeType & size() const { return _size; }
-		virtual void convert(PixelBufferLayout2D _layout, Byte * data) const = 0;
+		const Size & size() const { return _size; }
+		virtual void convert(PixelLayout2D _layout, Byte * data) const = 0;
 	};
 }

@@ -22,9 +22,9 @@ namespace Images
 		JPEGImage(Data * data);
 		virtual ~JPEGImage();
 		
-		virtual void convert(PixelBufferLayout2D layout, Byte * data) const;
+		virtual void convert(PixelLayout2D layout, Byte * data) const;
 		
-		static Owned<Data> save(PixelBufferLayout2D layout, const Byte * data, std::uint32_t quality = 75);
+		static Owned<Data> save(PixelLayout2D layout, const Byte * data, std::uint32_t quality = 75);
 		
 	private:
 		tjhandle _decompressor;
