@@ -14,13 +14,15 @@ extern "C" {
 #include <png.h>
 }
 
+#include <iostream>
+
 namespace Images
 {
 	PNGImage::PNGImage(Data * data) : Image(data)
 	{
 		png_image image = {.version = PNG_IMAGE_VERSION, .opaque = nullptr};
 		png_image_begin_read_from_memory(&image, data->begin(), data->size());
-
+		
 		_size[0] = image.width;
 		_size[1] = image.height;
 		_size[2] = 1;
@@ -43,7 +45,6 @@ namespace Images
 		png_image_finish_read(&image, nullptr, output, static_cast<png_int_32>(layout.stride[0]), nullptr);
 
 		png_image_free(&image);
-
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
@@ -81,7 +82,7 @@ namespace Images
 	{
 		png_image image = {.opaque = nullptr, .version = PNG_IMAGE_VERSION, .width = static_cast<png_uint_32>(layout.size[0]), .height = static_cast<png_uint_32>(layout.size[1]), .format = format};
 
-		auto buffer = shared<DynamicBuffer>(PNG_IMAGE_PNG_SIZE_MAX(image), true);
+		auto buffer = shared<DynamicBuffer>(PNG_IMAGE_PNG_SIZE_MAX(image));
 
 		png_alloc_size_t size = buffer->size();
 
