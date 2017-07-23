@@ -18,8 +18,20 @@ namespace Images
 		PNGImage(Data * data);
 		virtual ~PNGImage();
 		
-		virtual void convert(PixelLayout2D layout, Byte * data) const;
-		
-		static Owned<Data> save(PixelLayout2D layout, const Byte * data);
+		void load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const;
+		void load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const;
+		void load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const;
+		void load(const PixelLayout<PixelFormat::BGR8> & layout, Byte * data) const;
+
+		void load(const PixelLayout<PixelFormat::RGBA16> & layout, Byte * data) const;
+		void load(const PixelLayout<PixelFormat::BGRA16> & layout, Byte * data) const;
+
+		static Shared<Buffer> save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data);
+		static Shared<Buffer> save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data);
+		static Shared<Buffer> save(PixelLayout<PixelFormat::RGB8> layout, const Byte * data);
+		static Shared<Buffer> save(PixelLayout<PixelFormat::BGR8> layout, const Byte * data);
+
+		static Shared<Buffer> save(PixelLayout<PixelFormat::RGBA16> layout, const Byte * data);
+		static Shared<Buffer> save(PixelLayout<PixelFormat::BGRA16> layout, const Byte * data);
 	};
 }

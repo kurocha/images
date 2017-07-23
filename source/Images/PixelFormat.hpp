@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <tuple>
+
 namespace Images
 {
 	namespace PixelFormat
@@ -55,7 +57,7 @@ namespace Images
 		template <typename ...Channels>
 		struct Standard : public Color<Channels...>
 		{
-			using std::tuple<Channels...>::tuple;
+			using Color<Channels...>::Color;
 
 			static constexpr std::size_t CHANNELS = sizeof...(Channels);
 		};
@@ -93,7 +95,7 @@ namespace Images
 		using RGB8 = Standard<Red<U8>, Green<U8>, Blue<U8>>;
 		
 		// All default 16-bit pixel formats assume linear color space.
-		using BGRA16 = Premultiplied<Linear<Blue<U16>, Green<U16>, Red<U16>>, Alpha<U16>>;
-		using RGBA16 = Premultiplied<Linear<Red<U16>, Green<U16>, Blue<U16>>, Alpha<U16>>;
+		using BGRA16 = Associated<Linear<Blue<U16>, Green<U16>, Red<U16>>, Alpha<U16>>;
+		using RGBA16 = Associated<Linear<Red<U16>, Green<U16>, Blue<U16>>, Alpha<U16>>;
 	}
 }

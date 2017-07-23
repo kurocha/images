@@ -15,6 +15,8 @@
 #include <Memory/Object.hpp>
 #include <Memory/Owned.hpp>
 
+#include "PixelLayout.hpp"
+
 #include <vector>
 
 namespace Images
@@ -23,30 +25,32 @@ namespace Images
 	
 	// A pixel buffer is a container for pixel data along with a layout that allows for interpretation of the buffer contents. This typically includes a pixel format which describes the layout of colour channels within an individual pixel element, a data type which describes the storage for each pixel component and a size which describes the organisation of pixel data into rows and columns and potentially other dimensions.
 	template <typename PixelLayoutT>
-	class PixelBuffer {
-	protected:
-		PixelLayoutT _layout;
-		const Byte * _data;
-		
+	class PixelBuffer : public Object
+	{
 	public:
 		using Byte = unsigned char;
 		using Size = typename PixelLayoutT::Size;
-		using PixelFormat = PixelLayoutT::PixelFormat;
+		using PixelFormat = typename PixelLayoutT::PixelFormat;
 		
-		PixelBuffer (const PixelLayoutT & layout, Byte * data) : _layout(layout) { resize(); }
+		PixelBuffer (const PixelLayoutT & layout) : _layout(layout) { resize(); }
 		virtual ~PixelBuffer() {}
-		
-		const Buffers::MutableBuffer & buffer() const { return _buffer; }
-		Buffers::MutableBuffer & buffer() { return _buffer; }
 		
 		virtual const Byte * data() const { return _buffer.begin(); }
 		virtual Byte * data() { return _buffer.begin(); }
 		
-		PixelType & operator[] (const Size & coordinates) {
-			return *reinterpret_cast<PixelType *>(data() + _layout.byte_offset(coordinates));
+		PixelFormat & operator[] (const Size & coordinates) {
+			return *reinterpret_cast<PixelFormat *>(data() + _layout.byte_offset(coordinates));
 		}
 		
 		const PixelLayoutT & layout() const { return _layout; }
+		
+	protected:
+		PixelLayoutT _layout;
+		Buffers::DynamicBuffer _buffer;
+		
+		void resize() {
+			_buffer.resize(_layout.data_size());
+		}
 	};
 	
 	using PixelBuffer2D = PixelBuffer<PixelLayout2D>;

@@ -32,52 +32,52 @@ namespace Images
 	{
 	}
 	
-	template <auto Function, typename LayoutT>
-	void WebPImage::convert(const LayoutT & layout, Byte * data) const
+	template <typename FunctionT, typename LayoutT>
+	void WebPImage::load(FunctionT function, const LayoutT & layout, Byte * data) const
 	{
-		auto result = Function(_data->begin(), _data->size(), data, layout.data_size(), layout.stride[0]);
+		auto result = function(_data->begin(), _data->size(), data, layout.data_size(), static_cast<int>(layout.stride[0]));
 		
 		if (result == nullptr)
-			throw std::runtime_error("WebP decoder failed to convert image!");
+			throw std::runtime_error("WebP decoder failed to load image!");
 	}
 	
 	// Load the image data into the given pixel buffer with the specified layout.
-	void WebPImage::convert(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
+	void WebPImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
-		PixelLayout<URGBA8> internal_layout(layout);
-		
-		this->convert<WebPDecodeRGBAInto>(internal_layout, data);
-		
-		// Convert from unassociated to associated alpha:
-		internal_layout->convert(layout, data);
+//		PixelLayout<PixelFormat::URGBA8> internal_layout(layout);
+//		
+//		this->load(WebPDecodeRGBAInto, internal_layout, data);
+//		
+//		// Convert from unassociated to associated alpha:
+//		internal_layout.convert(layout, data);
 	}
 	
-	void WebPImage::convert(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
+	void WebPImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
 	{
-		PixelLayout<UBGRA8> internal_layout(layout);
-		
-		this->convert<WebPDecodeBGRAInto>(internal_layout, data);
-		
-		// Convert from unassociated to associated alpha:
-		internal_layout->convert(layout, data);
+//		PixelLayout<PixelFormat::UBGRA8> internal_layout(layout);
+//		
+//		this->load(WebPDecodeBGRAInto, internal_layout, data);
+//		
+//		// Convert from unassociated to associated alpha:
+//		internal_layout.convert(layout, data);
 	}
 	
-	void WebPImage::convert(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const
+	void WebPImage::load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const
 	{
-		this->convert<WebPDecodeRGBInto>(layout, data);
+		this->load(WebPDecodeRGBInto, layout, data);
 	}
 	
-	void WebPImage::convert(const PixelLayout<PixelFormat::BGR8> & layout, Byte * data) const
+	void WebPImage::load(const PixelLayout<PixelFormat::BGR8> & layout, Byte * data) const
 	{
-		this->convert<WebPDecodeBGRInto>(layout, data);
+		this->load(WebPDecodeBGRInto, layout, data);
 	}
 	
-	template <auto Function, typename LayoutT>
-	Shared<Buffer> WebPImage::save(const LayoutT & layout, const Byte * data)
+	template <typename FunctionT, typename LayoutT>
+	Shared<Buffer> WebPImage::save(FunctionT function, const LayoutT & layout, const Byte * data)
 	{
 		Byte * output_data = nullptr;
 		
-		auto output_size = Function(data, layout.size[0], layout.size[1], layout.stride[0], &output_data);
+		auto output_size = function(data, static_cast<int>(layout.size[0]), static_cast<int>(layout.size[1]), static_cast<int>(layout.stride[0]), &output_data);
 		
 		if (output_data) {
 			return shared<ForeignBuffer<void, WebPFree>>(output_data, output_size);
@@ -88,38 +88,40 @@ namespace Images
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data)
 	{
-		PixelBuffer<PixelLayout<URGBA8>> pixel_buffer(layout);
-		
-		layout->convert(pixel_buffer.layout(), data, pixel_buffer.data());
-		
-		return this->save<WebPEncodeLosslessRGBA>(pixel_buffer.layout(), pixel_buffer.data());
+//		PixelBuffer<PixelLayout<URGBA8>> pixel_buffer(layout);
+//		
+//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
+//		
+//		return this->save<WebPEncodeLosslessRGBA>(pixel_buffer.layout(), pixel_buffer.data());
+		return save(WebPEncodeLosslessRGBA, layout, data);
 	}
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data)
 	{
-		PixelBuffer<PixelLayout<UBGRA8>> pixel_buffer(layout);
-		
-		layout->convert(pixel_buffer.layout(), data, pixel_buffer.data());
-		
-		return this->save<WebPEncodeLosslessBGRA>(pixel_buffer.layout(), pixel_buffer.data());
+//		PixelBuffer<PixelLayout<UBGRA8>> pixel_buffer(layout);
+//		
+//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
+//		
+//		return this->save<WebPEncodeLosslessBGRA>(pixel_buffer.layout(), pixel_buffer.data());
+		return save(WebPEncodeLosslessBGRA, layout, data);
 	}
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGB8> layout, const Byte * data)
 	{
-		return this->save<WebPEncodeLosslessRGB>(layout, data);
+		return save(WebPEncodeLosslessRGB, layout, data);
 	}
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGR8> layout, const Byte * data)
 	{
-		return this->save<WebPEncodeLosslessBGR>(layout, data);
+		return save(WebPEncodeLosslessBGR, layout, data);
 	}
 	
-	template <auto Function, typename LayoutT>
-	Shared<Buffer> WebPImage::save(const LayoutT & layout, const Byte * data, std::uint32_t quality_factor)
+	template <typename FunctionT, typename LayoutT>
+	Shared<Buffer> WebPImage::save(FunctionT function, const LayoutT & layout, const Byte * data, std::uint32_t quality)
 	{
 		Byte * output_data = nullptr;
 		
-		auto output_size = Function(data, layout.size[0], layout.size[1], layout.stride[0], quality_factor, &output_data);
+		auto output_size = function(data, static_cast<int>(layout.size[0]), static_cast<int>(layout.size[1]), static_cast<int>(layout.stride[0]), quality, &output_data);
 		
 		if (output_data) {
 			return shared<ForeignBuffer<void, WebPFree>>(output_data, output_size);
@@ -128,31 +130,33 @@ namespace Images
 		}
 	}
 	
-	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data, std::uint32_t quality_factor)
+	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data, std::uint32_t quality)
 	{
-		PixelBuffer<PixelLayout<URGBA8>> pixel_buffer(layout);
-		
-		layout->convert(pixel_buffer.layout(), data, pixel_buffer.data());
-		
-		return this->save<WebPEncodeRGBA>(pixel_buffer.layout(), pixel_buffer.data(), quality_factor);
+//		PixelBuffer<PixelLayout<PixelFormat::UBGRA8>> pixel_buffer(layout);
+//		
+//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
+//		
+//		return this->save<WebPEncodeRGBA>(pixel_buffer.layout(), pixel_buffer.data(), quality);
+		return save(WebPEncodeRGBA, layout, data, quality);
 	}
 	
-	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data, std::uint32_t quality_factor)
+	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data, std::uint32_t quality)
 	{
-		PixelBuffer<PixelLayout<UBGRA8>> pixel_buffer(layout);
-		
-		layout->convert(pixel_buffer.layout(), data, pixel_buffer.data());
-		
-		return this->save<WebPEncodeBGRA>(pixel_buffer.layout(), pixel_buffer.data(), quality_factor);
+//		PixelBuffer<PixelLayout<PixelFormat::UBGRA8>> pixel_buffer(layout);
+//		
+//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
+//		
+//		return this->save<WebPEncodeBGRA>(pixel_buffer.layout(), pixel_buffer.data(), quality);
+		return save(WebPEncodeBGRA, layout, data, quality);
 	}
 	
-	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGB8> layout, const Byte * data, std::uint32_t quality_factor)
+	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGB8> layout, const Byte * data, std::uint32_t quality)
 	{
-		return this->save<WebPEncodeRGB>(layout, data, quality_factor);
+		return save(WebPEncodeRGB, layout, data, quality);
 	}
 	
-	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGR8> layout, const Byte * data, std::uint32_t quality_factor)
+	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGR8> layout, const Byte * data, std::uint32_t quality)
 	{
-		return this->save<WebPEncodeBGR>(layout, data, quality_factor);
+		return save(WebPEncodeBGR, layout, data, quality);
 	}
 }

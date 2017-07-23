@@ -10,8 +10,12 @@
 
 #include "PixelFormat.hpp"
 
+#include <Euclid/Numerics/Vector.hpp>
+
 namespace Images
 {
+	using Euclid::Numerics::Vector;
+
 	template <std::size_t N>
 	Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, Vector<N, std::size_t> stride) {
 		return stride;
@@ -61,10 +65,10 @@ namespace Images
 			return stride.back();
 		}
 		
-		template <typename PixelFormatT>
-		PixelLayout(const PixelLayout<PixelFormatT, N> & other) : size(other.size), stride(other.stride)
+		template <typename OtherPixelFormatT>
+		PixelLayout(const PixelLayout<OtherPixelFormatT, N> & other) : size(other.size), stride(other.stride)
 		{
-			static_assert(pixel_size() == other.pixel_size(), "Pixel elements must have same size");
+			static_assert(pixel_size() == decltype(other)::pixel_size(), "Pixel elements must have same size");
 		}
 		
 		template <typename StrideType>
@@ -104,8 +108,8 @@ namespace Images
 		}
 		
 		// Convert pixel format into a new buffer.
-		template <typename PixelFormatT, typename InputBufferT, typename OutputBufferT>
-		void convert(const PixelLayout<PixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output)
+		template <typename OtherPixelFormatT, typename InputBufferT, typename OutputBufferT>
+		void convert(const PixelLayout<OtherPixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output)
 		{
 			each_coordinate([&](const Size & coordinate){
 				output[coordinate] = input[coordinate];
@@ -114,7 +118,7 @@ namespace Images
 		
 		template <std::size_t M>
 		std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
-			return Images::byte_offset(pixel_byte_size(), stride, coordinates);
+			return Images::byte_offset(pixel_size(), stride, coordinates);
 		}
 
 		template <typename PointerType>
