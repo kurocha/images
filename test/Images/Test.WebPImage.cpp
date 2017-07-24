@@ -26,20 +26,20 @@ namespace Images
 			}
 		},
 		
-		// {"can load file and convert to pixel buffer",
-		// 	[](UnitTest::Examiner & examiner) {
-		// 		Owned<Data> data = new Core::LocalFileData("test/Images/9452-v2.jpg");
-		// 		Ref<JPEGImage> image = new JPEGImage(data);
-		// 		
-		// 		PixelLayout2D pixel_layout{image->size()};
-		// 		Ref<PixelBuffer2D> pixel_buffer = new PixelBuffer2D(pixel_layout);
-		// 		image->load(pixel_layout, pixel_buffer->data());
-		// 		
-		// 		examiner << "Correct pixel colour was loaded from file" << std::endl;
-		// 		examiner.expect((*pixel_buffer)[{0, 0}]) == Vector<4, Byte>{125, 103, 79, 255};
-		// 	}
-		// },
-		// 
+		{"can load file and convert to pixel buffer",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/test.webp");
+				auto image = owned<WebPImage>(data);
+				
+				PixelLayout2D pixel_layout{image->size()};
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+				image->load(pixel_layout, pixel_buffer->data());
+				
+				examiner << "Correct pixel colour was loaded from file" << std::endl;
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{125, 103, 79}, 255};
+			}
+		},
+		
 		{"can save to lossless RGBA data",
 			[](UnitTest::Examiner & examiner) {
 				auto data = owned<Resources::FileData>("Images/fixtures/test.webp");

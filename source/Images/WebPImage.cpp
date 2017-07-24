@@ -44,22 +44,12 @@ namespace Images
 	// Load the image data into the given pixel buffer with the specified layout.
 	void WebPImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
-//		PixelLayout<PixelFormat::URGBA8> internal_layout(layout);
-//		
-//		this->load(WebPDecodeRGBAInto, internal_layout, data);
-//		
-//		// Convert from unassociated to associated alpha:
-//		internal_layout.convert(layout, data);
+		this->load(WebPDecodeRGBAInto, layout, data);
 	}
 	
 	void WebPImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
 	{
-//		PixelLayout<PixelFormat::UBGRA8> internal_layout(layout);
-//		
-//		this->load(WebPDecodeBGRAInto, internal_layout, data);
-//		
-//		// Convert from unassociated to associated alpha:
-//		internal_layout.convert(layout, data);
+		this->load(WebPDecodeBGRAInto, layout, data);
 	}
 	
 	void WebPImage::load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const

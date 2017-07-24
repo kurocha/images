@@ -35,8 +35,8 @@ namespace Images
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->load(pixel_layout, pixel_buffer->data());
 				
-				// examiner << "Correct pixel colour was loaded from file" << std::endl;
-				// examiner.expect((*pixel_buffer)[{0, 0}]) == Vector<4, Byte>{255, 255, 255, 0};
+				examiner << "Correct pixel colour was loaded from file" << std::endl;
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{255, 255, 255}, 0};
 			}
 		},
 		
@@ -49,12 +49,12 @@ namespace Images
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->load(pixel_layout, pixel_buffer->data());
 				
-				// examiner << "Correct pixel colour was loaded from file" << std::endl;
-				// examiner.expect((*pixel_buffer)[{0, 0}]) == Vector<4, Byte>{255, 0, 0, 255};
-				// examiner.expect((*pixel_buffer)[{1, 0}]) == Vector<4, Byte>{0, 255, 0, 255};
-				// examiner.expect((*pixel_buffer)[{2, 0}]) == Vector<4, Byte>{0, 0, 255, 255};
-				// examiner.expect((*pixel_buffer)[{3, 0}]) == Vector<4, Byte>{255, 255, 255, 255};
-				// examiner.expect((*pixel_buffer)[{5, 0}]) == Vector<4, Byte>{0, 0, 0, 255};
+				examiner << "Correct pixel colour was loaded from file" << std::endl;
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{255, 0, 0}, 255};
+				examiner.expect((*pixel_buffer)[{1, 0}]) == PixelFormat::RGBA8{{0, 255, 0}, 255};
+				examiner.expect((*pixel_buffer)[{2, 0}]) == PixelFormat::RGBA8{{0, 0, 255}, 255};
+				examiner.expect((*pixel_buffer)[{3, 0}]) == PixelFormat::RGBA8{{255, 255, 255}, 255};
+				examiner.expect((*pixel_buffer)[{5, 0}]) == PixelFormat::RGBA8{{0, 0, 0}, 255};
 			}
 		},
 		

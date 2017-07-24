@@ -9,34 +9,71 @@
 #pragma once
 
 #include <tuple>
+#include <utility>
+#include <iostream>
+#include <type_traits>
 
 namespace Images
 {
 	namespace PixelFormat
 	{
+		using namespace std::rel_ops;
+		
 		template <typename ValueT>
 		struct Red
 		{
 			ValueT value;
+			
+			Red(const ValueT & value_) : value(value_) {}
+			
+			bool operator==(const Red & other) const noexcept {return value == other.value;}
+			bool operator<(const Red & other) const noexcept {return value < other.value;}
 		};
-
+		
+		template <typename ValueT>
+		std::ostream & operator<<(std::ostream & output, const Red<ValueT> & red) {return output << +red.value;}
+		
 		template <typename ValueT>
 		struct Green
 		{
 			ValueT value;
+			
+			Green(const ValueT & value_) : value(value_) {}
+			
+			bool operator==(const Green & other) const noexcept {return value == other.value;}
+			bool operator<(const Green & other) const noexcept {return value < other.value;}
 		};
+		
+		template <typename ValueT>
+		std::ostream & operator<<(std::ostream & output, const Green<ValueT> & green) {return output << +green.value;}
 
 		template <typename ValueT>
 		struct Blue
 		{
 			ValueT value;
+			
+			Blue(const ValueT & value_) : value(value_) {}
+			
+			bool operator==(const Blue & other) const noexcept {return value == other.value;}
+			bool operator<(const Blue & other) const noexcept {return value < other.value;}
 		};
+
+		template <typename ValueT>
+		std::ostream & operator<<(std::ostream & output, const Blue<ValueT> & blue) {return output << +blue.value;}
 
 		template <typename ValueT>
 		struct Alpha
 		{
 			ValueT value;
+			
+			Alpha(const ValueT & value_) : value(value_) {}
+			
+			bool operator==(const Alpha & other) const noexcept {return value == other.value;}
+			bool operator<(const Alpha & other) const noexcept {return value < other.value;}
 		};
+
+		template <typename ValueT>
+		std::ostream & operator<<(std::ostream & output, const Alpha<ValueT> & alpha) {return output << +alpha.value;}
 
 		template <typename ...Channels>
 		struct Color : public std::tuple<Channels...>
@@ -79,6 +116,30 @@ namespace Images
 			
 			static constexpr std::size_t CHANNELS = sizeof...(Channels);
 		};
+		
+		template <std::size_t N, typename... T>
+		typename std::enable_if<(N >= sizeof...(T))>::type
+		print_tuple(std::ostream &, const std::tuple<T...> &) {}
+
+		template <std::size_t N, typename... T>
+		typename std::enable_if<(N < sizeof...(T))>::type
+		print_tuple(std::ostream & output, const std::tuple<T...> & tuple)
+		{
+			if (N != 0)
+				output << ", ";
+			
+			output << std::get<N>(tuple);
+			
+			print_tuple<N+1>(output, tuple);
+		}
+		
+		template <typename... T>
+		std::ostream& operator<<(std::ostream & output, const std::tuple<T...> & tuple)
+		{
+			output << "[";
+			print_tuple<0>(output, tuple);
+			return output << "]";
+		}
 		
 		using U8 = std::uint8_t;
 		using U16 = std::uint16_t;
