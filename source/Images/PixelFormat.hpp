@@ -136,9 +136,9 @@ namespace Images
 		template <typename... T>
 		std::ostream& operator<<(std::ostream & output, const std::tuple<T...> & tuple)
 		{
-			output << "[";
+			output << '{';
 			print_tuple<0>(output, tuple);
-			return output << "]";
+			return output << '}';
 		}
 		
 		using U8 = std::uint8_t;
