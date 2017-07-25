@@ -147,7 +147,9 @@ namespace Images
 		// All default 8-bit pixel formats assume sRGB color space.
 		using BGRA8 = Associated<Standard<Blue<U8>, Green<U8>, Red<U8>>, Alpha<U8>>;
 		using RGBA8 = Associated<Standard<Red<U8>, Green<U8>, Blue<U8>>, Alpha<U8>>;
-
+		
+		static_assert(sizeof(RGBA8) == 4, "RGBA8 pixel is 32-bits wide.");
+		
 		// Most file formats use unassociated alpha so we use this to convert the data.
 		using UBGRA8 = Unassociated<Standard<Blue<U8>, Green<U8>, Red<U8>>, Alpha<U8>>;
 		using URGBA8 = Unassociated<Standard<Red<U8>, Green<U8>, Blue<U8>>, Alpha<U8>>;
@@ -155,8 +157,12 @@ namespace Images
 		using BGR8 = Standard<Blue<U8>, Green<U8>, Red<U8>>;
 		using RGB8 = Standard<Red<U8>, Green<U8>, Blue<U8>>;
 		
+		static_assert(sizeof(RGB8) == 3, "RGB8 pixel is 24-bits wide.");
+		
 		// All default 16-bit pixel formats assume linear color space.
 		using BGRA16 = Associated<Linear<Blue<U16>, Green<U16>, Red<U16>>, Alpha<U16>>;
 		using RGBA16 = Associated<Linear<Red<U16>, Green<U16>, Blue<U16>>, Alpha<U16>>;
+		
+		static_assert(sizeof(RGBA16) == 8, "RGBA16 pixel is 64-bits wide.");
 	}
 }
