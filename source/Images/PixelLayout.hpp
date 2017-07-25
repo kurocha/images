@@ -12,6 +12,8 @@
 
 #include <Euclid/Numerics/Vector.hpp>
 
+#include <vector>
+
 namespace Images
 {
 	using Euclid::Numerics::Vector;

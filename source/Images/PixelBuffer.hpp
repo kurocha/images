@@ -17,8 +17,6 @@
 
 #include "PixelLayout.hpp"
 
-#include <vector>
-
 namespace Images
 {
 	using namespace Memory;
