@@ -20,7 +20,10 @@ namespace Images
 {
 	PNGImage::PNGImage(Data * data) : Image(data)
 	{
-		png_image image = {.version = PNG_IMAGE_VERSION, .opaque = nullptr};
+		png_image image;
+		image.version = PNG_IMAGE_VERSION;
+		image.opaque = nullptr;
+		
 		png_image_begin_read_from_memory(&image, data->begin(), data->size());
 		
 		_size[0] = image.width;
