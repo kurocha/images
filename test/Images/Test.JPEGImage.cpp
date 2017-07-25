@@ -33,7 +33,7 @@ namespace Images
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				image->load(pixel_layout, pixel_buffer->data());
+				image->load(pixel_layout, pixel_buffer->begin());
 				
 				// examiner << "Correct pixel colour was loaded from file" << std::endl;
 				// examiner.expect((*pixel_buffer)[{0, 0}]) == Vector<4, Byte>{125, 103, 79, 255};
@@ -47,9 +47,9 @@ namespace Images
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				image->load(pixel_layout, pixel_buffer->data());
+				image->load(pixel_layout, pixel_buffer->begin());
 				
-				auto output_buffer = JPEGImage::save(pixel_layout, pixel_buffer->data());
+				auto output_buffer = JPEGImage::save(pixel_layout, pixel_buffer->begin());
 				auto output_data = owned<BufferedData>(output_buffer);
 				
 				examiner << "Output data was generated." << std::endl;

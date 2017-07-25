@@ -33,7 +33,7 @@ namespace Images
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				image->load(pixel_layout, pixel_buffer->data());
+				image->load(pixel_layout, pixel_buffer->begin());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
 				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{32, 128, 196}, 255};
@@ -47,9 +47,9 @@ namespace Images
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				image->load(pixel_layout, pixel_buffer->data());
+				image->load(pixel_layout, pixel_buffer->begin());
 				
-				auto output_buffer = WebPImage::save(pixel_layout, pixel_buffer->data());
+				auto output_buffer = WebPImage::save(pixel_layout, pixel_buffer->begin());
 				auto output_data = owned<BufferedData>(output_buffer);
 				
 				examiner << "Output data was generated." << std::endl;
@@ -70,9 +70,9 @@ namespace Images
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				image->load(pixel_layout, pixel_buffer->data());
+				image->load(pixel_layout, pixel_buffer->begin());
 				
-				auto output_buffer = WebPImage::save(pixel_layout, pixel_buffer->data(), 75);
+				auto output_buffer = WebPImage::save(pixel_layout, pixel_buffer->begin(), 75);
 				auto output_data = owned<BufferedData>(output_buffer);
 				
 				examiner << "Output data was generated." << std::endl;
