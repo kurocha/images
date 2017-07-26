@@ -36,7 +36,7 @@ namespace Images
 				image->load(pixel_layout, pixel_buffer->begin());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
-				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{32, 128, 196}, 255};
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{32, 128, 196, 255};
 			}
 		},
 		

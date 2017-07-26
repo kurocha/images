@@ -35,7 +35,7 @@ define_target 'images-library' do |target|
 	target.depends 'Build/Clang'
 	
 	target.depends :platform
-	target.depends "Language/C++11", private: true
+	target.depends "Language/C++14", private: true
 	
 	target.depends "Library/Memory"
 	target.depends "Library/Resources"
@@ -65,7 +65,7 @@ define_target "images-tests" do |target|
 	target.depends "Library/UnitTest"
 	target.depends 'Library/Images'
 	
-	target.depends "Language/C++11", private: true
+	target.depends "Language/C++14", private: true
 	
 	target.provides 'Test/Images'
 end

@@ -36,7 +36,7 @@ namespace Images
 				image->load(pixel_layout, pixel_buffer->begin());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
-				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{255, 255, 255}, 0};
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{255, 255, 255, 0};
 			}
 		},
 		
@@ -50,11 +50,11 @@ namespace Images
 				image->load(pixel_layout, pixel_buffer->begin());
 				
 				examiner << "Correct pixel colour was loaded from file" << std::endl;
-				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{{255, 0, 0}, 255};
-				examiner.expect((*pixel_buffer)[{1, 0}]) == PixelFormat::RGBA8{{0, 255, 0}, 255};
-				examiner.expect((*pixel_buffer)[{2, 0}]) == PixelFormat::RGBA8{{0, 0, 255}, 255};
-				examiner.expect((*pixel_buffer)[{3, 0}]) == PixelFormat::RGBA8{{255, 255, 255}, 255};
-				examiner.expect((*pixel_buffer)[{5, 0}]) == PixelFormat::RGBA8{{0, 0, 0}, 255};
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{255, 0, 0, 255};
+				examiner.expect((*pixel_buffer)[{1, 0}]) == PixelFormat::RGBA8{0, 255, 0, 255};
+				examiner.expect((*pixel_buffer)[{2, 0}]) == PixelFormat::RGBA8{0, 0, 255, 255};
+				examiner.expect((*pixel_buffer)[{3, 0}]) == PixelFormat::RGBA8{255, 255, 255, 255};
+				examiner.expect((*pixel_buffer)[{5, 0}]) == PixelFormat::RGBA8{0, 0, 0, 255};
 			}
 		},
 		

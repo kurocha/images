@@ -2,6 +2,7 @@
 #include <UnitTest/UnitTest.hpp>
 
 #include <Images/PixelBuffer.hpp>
+#include <Images/PNGImage.hpp>
 #include <Euclid/Numerics/Vector.IO.hpp>
 
 #include <cstring>
@@ -13,12 +14,21 @@ namespace Images
 
 		{"PixelBuffer Initialization",
 			[](UnitTest::Examiner & examiner) {
-				// PixelLayout2D pixel_layout(PixelLayout2D::Size{8, 8});
-				// auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
-				// 
-				// examiner << "Image data was allocated" << std::endl;
-				// examiner.check_equal(pixel_buffer->buffer().size(), 8*8*4);
-
+				PixelLayout2D pixel_layout(PixelLayout2D::Size{256, 256});
+				PixelBuffer2D pixel_buffer(pixel_layout);
+				
+				examiner << "Image data was allocated" << std::endl;
+				examiner.check_equal(pixel_buffer.size(), 256*256*4);
+				
+				for (std::size_t i = 0; i < 256; i += 1) {
+					for (std::size_t j = 0; j < 256; j += 1) {
+						pixel_buffer[{i, j}] = PixelFormat::RGBA8{(PixelFormat::U8)i, (PixelFormat::U8)j, 0, 255};
+					}
+				}
+				
+				auto output_buffer = PNGImage::save(pixel_layout, pixel_buffer.begin());
+				output_buffer->write_to_file("gradient.png");
+				
 /*
 				image->fill(0xFF);
 

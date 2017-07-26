@@ -35,8 +35,8 @@ namespace Images
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
 				image->load(pixel_layout, pixel_buffer->begin());
 				
-				// examiner << "Correct pixel colour was loaded from file" << std::endl;
-				// examiner.expect((*pixel_buffer)[{0, 0}]) == Vector<4, Byte>{125, 103, 79, 255};
+				examiner << "Correct pixel colour was loaded from file" << std::endl;
+				examiner.expect((*pixel_buffer)[{0, 0}]) == PixelFormat::RGBA8{125, 103, 79, 255};
 			}
 		},
 		
