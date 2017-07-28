@@ -46,7 +46,7 @@ namespace Images
 		{
 			U8 red, green, blue;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(red, green, blue);}
+			std::tuple<U8, U8, U8> make_tuple() const noexcept {return std::make_tuple(red, green, blue);}
 			
 			using PixelTraits = Standard<RGB8>;
 		};
@@ -55,7 +55,7 @@ namespace Images
 		{
 			U8 red, green, blue, alpha;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(red, green, blue, alpha);}
+			std::tuple<U8, U8, U8, U8> make_tuple() const noexcept {return std::make_tuple(red, green, blue, alpha);}
 			
 			using PixelTraits = Associated<Standard<RGBA8>>;
 		};
@@ -64,7 +64,7 @@ namespace Images
 		{
 			U16 red, green, blue, alpha;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(red, green, blue, alpha);}
+			std::tuple<U16, U16, U16, U16> make_tuple() const noexcept {return std::make_tuple(red, green, blue, alpha);}
 			
 			using PixelTraits = Associated<Linear<RGBA16>>;
 		};
@@ -73,7 +73,7 @@ namespace Images
 		{
 			U8 blue, green, red;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(blue, green, red);}
+			std::tuple<U8, U8, U8> make_tuple() const noexcept {return std::make_tuple(blue, green, red);}
 			
 			using PixelTraits = Standard<BGR8>;
 		};
@@ -82,7 +82,7 @@ namespace Images
 		{
 			U8 blue, green, red, alpha;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(blue, green, red, alpha);}
+			std::tuple<U8, U8, U8, U8> make_tuple() const noexcept {return std::make_tuple(blue, green, red, alpha);}
 			
 			using PixelTraits = Associated<Standard<BGRA8>>;
 		};
@@ -91,7 +91,7 @@ namespace Images
 		{
 			U16 blue, green, red, alpha;
 			
-			auto make_tuple() const noexcept {return std::make_tuple(blue, green, red, alpha);}
+			std::tuple<U16, U16, U16, U16> make_tuple() const noexcept {return std::make_tuple(blue, green, red, alpha);}
 			
 			using PixelTraits = Associated<Linear<BGRA16>>;
 		};
