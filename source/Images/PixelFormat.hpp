@@ -107,7 +107,7 @@ namespace Images
 			if (N != 0)
 				output << ", ";
 			
-			output << std::get<N>(tuple);
+			output << +std::get<N>(tuple);
 			
 			print_tuple<N+1>(output, tuple);
 		}
