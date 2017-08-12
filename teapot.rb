@@ -99,6 +99,8 @@ define_configuration "images" do |configuration|
 	configuration.require "euclid"
 	configuration.require "resources"
 	
+	configuration.require "zlib-ng"
+	
 	configuration.require "png"
 	configuration.require "jpeg"
 	configuration.require "webp"
