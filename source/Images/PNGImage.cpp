@@ -83,7 +83,7 @@ namespace Images
 	template <typename LayoutT>
 	Shared<Buffer> save_to_buffer(const LayoutT & layout, png_uint_32 format, const Byte * input)
 	{
-		png_image image = {.opaque = nullptr, .version = PNG_IMAGE_VERSION, .width = static_cast<png_uint_32>(layout.size[0]), .height = static_cast<png_uint_32>(layout.size[1]), .format = format};
+		png_image image = {.opaque = nullptr, .version = PNG_IMAGE_VERSION, .width = static_cast<png_uint_32>(layout.size[0]), .height = static_cast<png_uint_32>(layout.size[1]), .format = format, .flags = PNG_IMAGE_FLAG_FAST};
 
 		auto buffer = shared<DynamicBuffer>(PNG_IMAGE_PNG_SIZE_MAX(image));
 
