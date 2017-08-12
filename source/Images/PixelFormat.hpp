@@ -78,7 +78,7 @@ namespace Images
 			using PixelTraits = Standard<BGR8>;
 		};
 		
-		struct BGRA8 : public Standard<BGRA8>, public Associated<BGRA8>
+		struct BGRA8
 		{
 			U8 blue, green, red, alpha;
 			
@@ -87,7 +87,7 @@ namespace Images
 			using PixelTraits = Associated<Standard<BGRA8>>;
 		};
 		
-		struct BGRA16 : public Linear<BGRA8>, public Associated<BGRA16>
+		struct BGRA16
 		{
 			U16 blue, green, red, alpha;
 			
