@@ -8,6 +8,8 @@
 
 #include "PNGImage.hpp"
 
+#include <Resources/LoadError.hpp>
+
 #include <cassert>
 
 extern "C" {
@@ -47,17 +49,22 @@ namespace Images
 
 		png_image_finish_read(&image, nullptr, output, static_cast<png_int_32>(layout.stride[0]), nullptr);
 
+		if (PNG_IMAGE_FAILED(image))
+		{
+			throw std::runtime_error(image.message);
+		}
+
 		png_image_free(&image);
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
-		load_from(_data, layout, PNG_FORMAT_RGBA, data);
+		load_from(_data, layout, PNG_FORMAT_RGBA|PNG_FORMAT_FLAG_ASSOCIATED_ALPHA, data);
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
 	{
-		load_from(_data, layout, PNG_FORMAT_BGRA, data);
+		load_from(_data, layout, PNG_FORMAT_BGRA|PNG_FORMAT_FLAG_ASSOCIATED_ALPHA, data);
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const
