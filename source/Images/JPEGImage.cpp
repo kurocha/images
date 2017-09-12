@@ -105,7 +105,14 @@ namespace Images
 
 	Shared<Buffer> JPEGImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * input, std::uint32_t quality)
 	{
-		return save_to_buffer(layout, input, TJPF_RGBA, quality);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		
+		auto input_pixels = pixels(layout, input);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> output_pixels(internal_layout);
+		
+		layout.convert(internal_layout, input_pixels, output_pixels);
+		
+		return save_to_buffer(internal_layout, output_pixels.begin(), TJPF_RGBA, quality);
 	}
 
 	Shared<Buffer> JPEGImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * input, std::uint32_t quality)
