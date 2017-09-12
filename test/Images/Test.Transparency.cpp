@@ -41,5 +41,36 @@ namespace Images
 				examiner.expect(count) == 0;
 			}
 		},
+		
+		{"it should round trip pixels correctly",
+			[](UnitTest::Examiner & examiner) {
+				PixelLayout2D pixel_layout(PixelLayout2D::Size{256, 256});
+				PixelBuffer2D pixel_buffer(pixel_layout);
+				
+				for (std::size_t i = 0; i < 256; i += 1) {
+					for (std::size_t j = 0; j < 256; j += 1) {
+						auto a = static_cast<PixelFormat::U8>(i), c = static_cast<PixelFormat::U8>(std::min(i,j));
+						
+						pixel_buffer[{i,j}] = PixelFormat::RGBA8{c, c, c, a};
+					}
+				}
+				
+				// Save the PNG data:
+				auto output_buffer = PNGImage::save(pixel_layout, pixel_buffer.begin());
+				auto output_data = owned<BufferedData>(output_buffer);
+				
+				// Load the PNG data:
+				PNGImage image{output_data};
+				image.load(pixel_layout, pixel_buffer.begin());
+				
+				for (std::size_t i = 0; i < 256; i += 1) {
+					for (std::size_t j = 0; j < 256; j += 1) {
+						auto a = static_cast<PixelFormat::U8>(i), c = static_cast<PixelFormat::U8>(std::min(i,j));
+						
+						examiner.expect(pixel_buffer[{i,j}]) == PixelFormat::RGBA8{c, c, c, a};
+					}
+				}
+			}
+		}
 	};
 }

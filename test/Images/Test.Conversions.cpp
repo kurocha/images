@@ -17,19 +17,19 @@ namespace Images
 	UnitTest::Suite ConversionsTestSuite {
 		"Images::Conversions",
 		
-		// {"can convert from SRGB to Linear",
-		// 	[](UnitTest::Examiner & examiner) {
-		// 		examiner.expect(Conversions::convert_srgb_to_linear(number(0.0))) == 0.0;
-		// 		examiner.expect(Conversions::convert_srgb_to_linear(number(1.0))) == 1.0;
-		// 		
-		// 		for (auto f = number(0.0); f <= 1.0; f += 0.1) {
-		// 			auto g = Conversions::convert_srgb_to_linear(number(f));
-		// 			auto h = Conversions::convert_linear_to_srgb(number(g));
-		// 			
-		// 			examiner << "Round trip conversion of sRGB curve.";
-		// 			examiner.check(f.equivalent(h));
-		// 		}
-		// 	}
-		// },
+		{"can convert from SRGB to Linear",
+			[](UnitTest::Examiner & examiner) {
+				examiner.expect(Conversions::convert_srgb_to_linear(number(0.0))) == 0.0;
+				examiner.expect(Conversions::convert_srgb_to_linear(number(1.0))) == 1.0;
+				
+				for (auto f = number(0.0); f <= 1.0; f += 0.1) {
+					auto g = Conversions::convert_srgb_to_linear(number(f));
+					auto h = Conversions::convert_linear_to_srgb(number(g));
+					
+					examiner << "Round trip conversion of sRGB curve.";
+					examiner.check(f.equivalent(h));
+				}
+			}
+		},
 	};
 }

@@ -113,7 +113,14 @@ namespace Images
 
 	Shared<Buffer> PNGImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data)
 	{
-		return save_to_buffer(layout, PNG_FORMAT_RGBA, data);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		
+		auto input_pixels = pixels(layout, data);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> output_pixels(internal_layout);
+		
+		layout.convert(internal_layout, input_pixels, output_pixels);
+		
+		return save_to_buffer(internal_layout, PNG_FORMAT_RGBA, output_pixels.begin());
 	}
 
 	Shared<Buffer> PNGImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data)
