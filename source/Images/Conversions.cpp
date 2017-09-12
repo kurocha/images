@@ -16,7 +16,9 @@ namespace Images
 	{
 		void convert(const float & input, PixelFormat::U8 & output)
 		{
-			output = static_cast<PixelFormat::U8>(std::round(input));
+			if (input < 0.0) output = 0;
+			else if (input > 255.0) output = 255;
+			else output = static_cast<PixelFormat::U8>(std::round(input));
 		}
 		
 		PixelFormat::U8 round(const float & input)
