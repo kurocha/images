@@ -44,7 +44,14 @@ namespace Images
 	// Load the image data into the given pixel buffer with the specified layout.
 	void WebPImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
-		this->load(WebPDecodeRGBAInto, layout, data);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> input_pixels(internal_layout);
+		
+		this->load(WebPDecodeRGBAInto, internal_layout, input_pixels.begin());
+		
+		auto output_pixels = pixels(layout, data);
+		
+		internal_layout.convert(layout, input_pixels, output_pixels);
 	}
 	
 	void WebPImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
@@ -78,21 +85,18 @@ namespace Images
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data)
 	{
-//		PixelBuffer<PixelLayout<URGBA8>> pixel_buffer(layout);
-//		
-//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
-//		
-//		return this->save<WebPEncodeLosslessRGBA>(pixel_buffer.layout(), pixel_buffer.data());
-		return save(WebPEncodeLosslessRGBA, layout, data);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		
+		auto input_pixels = pixels(layout, data);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> output_pixels(internal_layout);
+		
+		layout.convert(internal_layout, input_pixels, output_pixels);
+		
+		return save(WebPEncodeLosslessRGBA, internal_layout, output_pixels.begin());
 	}
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data)
 	{
-//		PixelBuffer<PixelLayout<UBGRA8>> pixel_buffer(layout);
-//		
-//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
-//		
-//		return this->save<WebPEncodeLosslessBGRA>(pixel_buffer.layout(), pixel_buffer.data());
 		return save(WebPEncodeLosslessBGRA, layout, data);
 	}
 	
