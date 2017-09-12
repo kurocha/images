@@ -84,7 +84,7 @@ namespace Images
 		}
 		
 		template <typename BlockT>
-		void each_coordinate(BlockT block, Size & offset, const std::size_t n, const std::size_t m) const {
+		void each_coordinate(BlockT block, Size & offset, const std::size_t n, const std::size_t m) const noexcept {
 			for (offset[n] = 0; offset[n] < size[n]; offset[n] += 1) {
 				if (n == m)
 					block(offset);
@@ -94,7 +94,7 @@ namespace Images
 		}
 		
 		template <typename BlockT>
-		Size each_coordinate(BlockT block, std::size_t m = 0) const {
+		Size each_coordinate(BlockT block, std::size_t m = 0) const noexcept {
 			Size offset = 0;
 			
 			each_coordinate(block, offset, N - 1, m);
@@ -112,7 +112,7 @@ namespace Images
 		
 		// Convert pixel format into a new buffer.
 		template <typename OtherPixelFormatT, typename InputBufferT, typename OutputBufferT>
-		void convert(const PixelLayout<OtherPixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output)
+		void convert(const PixelLayout<OtherPixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output) const noexcept
 		{
 			each_coordinate([&](const Size & coordinate){
 				Conversions::convert(input[coordinate], output[coordinate]);
@@ -145,11 +145,11 @@ namespace Images
 		
 		Pixels(LayoutT & layout, DataT * data) : layout(layout), data(data) {}
 		
-		PixelFormat & operator[](const Size & coordinates) {
+		PixelFormat & operator[](const Size & coordinates) noexcept {
 			return *reinterpret_cast<PixelFormat *>(data + layout.byte_offset(coordinates));
 		}
 		
-		const PixelFormat & operator[](const Size & coordinates) const {
+		const PixelFormat & operator[](const Size & coordinates) const noexcept {
 			return *reinterpret_cast<const PixelFormat *>(data + layout.byte_offset(coordinates));
 		}
 		

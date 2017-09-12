@@ -42,6 +42,10 @@ namespace Images
 			return *reinterpret_cast<PixelFormat *>(begin() + _layout.byte_offset(coordinates));
 		}
 		
+		const PixelFormat & operator[](const Size & coordinates) const {
+			return *reinterpret_cast<const PixelFormat *>(begin() + _layout.byte_offset(coordinates));
+		}
+		
 		const PixelLayoutT & layout() const { return _layout; }
 		
 	protected:

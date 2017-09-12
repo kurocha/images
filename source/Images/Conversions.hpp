@@ -24,7 +24,7 @@ namespace Images
 			if (component <= 0.0404482362771082) {
 				return component / 12.92;
 			} else {
-				return number((component + 0.055) / 1.055).raise(2.4);
+				return std::pow((component + static_cast<NumericT>(0.055)) / static_cast<NumericT>(1.055), static_cast<NumericT>(2.4));
 			}
 		}
 		
@@ -33,7 +33,7 @@ namespace Images
 			if (component <= 0.00313066844250063) {
 				return component * 12.92;
 			} else {
-				return number(component).raise(1.0/2.4) * 1.055 - 0.055;
+				return std::pow(component, static_cast<NumericT>(1.0/2.4)) * 1.055 - 0.055;
 			}
 		}
 		

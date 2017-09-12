@@ -60,13 +60,12 @@ namespace Images
 	void PNGImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
 		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> input_pixels(internal_layout);
 		
-		load_from(_data, internal_layout, PNG_FORMAT_RGBA, data);
+		load_from(_data, internal_layout, PNG_FORMAT_RGBA, input_pixels.begin());
 		
-		auto input_pixels = pixels(internal_layout, data);
 		auto output_pixels = pixels(layout, data);
 		
-		// Perform an in-place conversion:
 		internal_layout.convert(layout, input_pixels, output_pixels);
 	}
 
