@@ -60,6 +60,15 @@ namespace Images
 			using PixelTraits = Associated<Standard<RGBA8>>;
 		};
 		
+		struct RGBa8
+		{
+			U8 red, green, blue, alpha;
+			
+			std::tuple<U8, U8, U8, U8> make_tuple() const noexcept {return std::make_tuple(red, green, blue, alpha);}
+			
+			using PixelTraits = Unassociated<Standard<RGBA8>>;
+		};
+		
 		struct RGBA16
 		{
 			U16 red, green, blue, alpha;

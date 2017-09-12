@@ -59,12 +59,20 @@ namespace Images
 
 	void PNGImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
-		load_from(_data, layout, PNG_FORMAT_RGBA|PNG_FORMAT_FLAG_ASSOCIATED_ALPHA, data);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		
+		load_from(_data, internal_layout, PNG_FORMAT_RGBA, data);
+		
+		auto input_pixels = pixels(internal_layout, data);
+		auto output_pixels = pixels(layout, data);
+		
+		// Perform an in-place conversion:
+		internal_layout.convert(layout, input_pixels, output_pixels);
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
 	{
-		load_from(_data, layout, PNG_FORMAT_BGRA|PNG_FORMAT_FLAG_ASSOCIATED_ALPHA, data);
+		load_from(_data, layout, PNG_FORMAT_BGRA, data);
 	}
 
 	void PNGImage::load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const

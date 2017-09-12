@@ -9,6 +9,7 @@
 #pragma once
 
 #include "PixelFormat.hpp"
+#include "Conversions.hpp"
 
 #include <Euclid/Numerics/Vector.hpp>
 
@@ -114,17 +115,17 @@ namespace Images
 		void convert(const PixelLayout<OtherPixelFormatT, N> & output_layout, const InputBufferT & input, OutputBufferT & output)
 		{
 			each_coordinate([&](const Size & coordinate){
-				output[coordinate] = input[coordinate];
+				Conversions::convert(input[coordinate], output[coordinate]);
 			});
 		}
 		
 		template <std::size_t M>
-		std::size_t byte_offset(Vector<M, std::size_t> coordinates) {
+		std::size_t byte_offset(Vector<M, std::size_t> coordinates) const noexcept {
 			return Images::byte_offset(pixel_size(), stride, coordinates);
 		}
 
 		template <typename PointerType>
-		std::vector<PointerType> generate_row_pointers(PointerType data) {
+		std::vector<PointerType> generate_row_pointers(PointerType data) const {
 			std::vector<PointerType> row_pointers;
 			
 			each_coordinate([&](const Size & offset){
@@ -134,6 +135,33 @@ namespace Images
 			return row_pointers;
 		}
 	};
+	
+	template <typename LayoutT, typename DataT>
+	class Pixels
+	{
+	public:
+		using Size = typename LayoutT::Size;
+		using PixelFormat = typename LayoutT::PixelFormat;
+		
+		Pixels(LayoutT & layout, DataT * data) : layout(layout), data(data) {}
+		
+		PixelFormat & operator[](const Size & coordinates) {
+			return *reinterpret_cast<PixelFormat *>(data + layout.byte_offset(coordinates));
+		}
+		
+		const PixelFormat & operator[](const Size & coordinates) const {
+			return *reinterpret_cast<const PixelFormat *>(data + layout.byte_offset(coordinates));
+		}
+		
+		LayoutT & layout;
+		DataT * data;
+	};
+	
+	template <typename LayoutT, typename DataT>
+	Pixels<LayoutT, DataT> pixels(LayoutT & layout, DataT * data)
+	{
+		return {layout, data};
+	}
 	
 	using PixelLayout2D = PixelLayout<>;
 }

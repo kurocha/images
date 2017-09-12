@@ -38,7 +38,7 @@ namespace Images
 		
 		virtual std::size_t size() const { return _buffer.size();}
 		
-		PixelFormat & operator[] (const Size & coordinates) {
+		PixelFormat & operator[](const Size & coordinates) {
 			return *reinterpret_cast<PixelFormat *>(begin() + _layout.byte_offset(coordinates));
 		}
 		

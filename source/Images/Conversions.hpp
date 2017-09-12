@@ -1,6 +1,6 @@
 //
-//  Alpha.hpp
-//  This file is part of the "vulkanraum" project and released under the Orion Transfer Commercial License.
+//  Conversions.hpp
+//  This file is part of the "Images" project and released under the MIT License.
 //
 //  Created by Samuel Williams on 28/4/2017.
 //  Copyright, 2017, by Samuel Williams. All rights reserved.
@@ -9,6 +9,8 @@
 #pragma once
 
 #include <Euclid/Numerics/Vector.hpp>
+
+#include "PixelFormat.hpp"
 
 namespace Images
 {
@@ -22,7 +24,7 @@ namespace Images
 			if (component <= 0.0404482362771082) {
 				return component / 12.92;
 			} else {
-				return ((component + 0.055) / 1.055).raise(2.4);
+				return number((component + 0.055) / 1.055).raise(2.4);
 			}
 		}
 		
@@ -31,38 +33,11 @@ namespace Images
 			if (component <= 0.00313066844250063) {
 				return component * 12.92;
 			} else {
-				return component.raise(1.0/2.4) * 1.055 - 0.055;
+				return number(component).raise(1.0/2.4) * 1.055 - 0.055;
 			}
 		}
 		
-		// Vector<4, Byte> srgb_convert_to_premultiplied_alpha(Vector<4, Byte> input) {
-		// 	auto normalized = Vec4(input) / 255.0;
-		// 	
-		// 	float alpha = normalized[3];
-		// 	
-		// 	Vec3 linear;
-		// 	for (std::size_t i = 0; i < 3; i += 1) {
-		// 		linear[i] = convert_srgb_to_linear(normalized[i]);
-		// 	}
-		// 	
-		// 	auto premultiplied = linear * alpha;
-		// 	
-		// 	return (convert_linear_to_srgb(premultiplied) * 255.0) << input[3];
-		// }
-		// 
-		// Vector<4, Byte> srgb_convert_to_postmultiplied_alpha(Vector<4, Byte> input) {
-		// 	auto normalized = Vec4(input) / 255.0;
-		// 	
-		// 	float alpha = normalized[3];
-		// 	
-		// 	Vec3 linear;
-		// 	for (std::size_t i = 0; i < 3; i += 1) {
-		// 		linear[i] = convert_srgb_to_linear(normalized[i]);
-		// 	}
-		// 	
-		// 	auto premultiplied = linear / alpha;
-		// 	
-		// 	return (convert_linear_to_srgb(premultiplied) * 255.0) << input[3];
-		// }
+		void convert(const PixelFormat::RGBa8 & input, PixelFormat::RGBA8 & output);
+		void convert(const PixelFormat::RGBA8 & input, PixelFormat::RGBa8 & output);
 	}
 }
