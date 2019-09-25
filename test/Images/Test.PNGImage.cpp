@@ -11,6 +11,8 @@
 #include <Images/PNGImage.hpp>
 #include <Resources/FileData.hpp>
 
+#include "Benchmark.hpp"
+
 namespace Images
 {
 	UnitTest::Suite PNGImageTestSuite {
@@ -22,7 +24,44 @@ namespace Images
 				auto image = owned<PNGImage>(data);
 				
 				examiner << "Width and size should be loaded correctly" << std::endl;
-				examiner.expect(image->size()) == Vec3u{144, 144, 1};
+				examiner.expect(image->size()) == Image::Size{144, 144, 1};
+			}
+		},
+		
+		{"can load bacon efficiently",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.png");
+				
+				examiner << "File size: " << data->size() << std::endl;
+				
+				measure(examiner, "PNG load", [&]{
+					auto image = owned<PNGImage>(data);
+					
+					PixelLayout2D pixel_layout{image->size()};
+					auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+					image->load(pixel_layout, pixel_buffer->begin());
+				});
+			}
+		},
+		
+		{"can save bacon efficiently",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.png");
+				
+				auto image = owned<PNGImage>(data);
+				
+				PixelLayout2D pixel_layout{image->size()};
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+				image->load(pixel_layout, pixel_buffer->begin());
+				
+				Shared<Buffers::Buffer> output;
+				
+				measure(examiner, "PNGImage::save", [&]{
+					output = PNGImage::save(pixel_layout, pixel_buffer->begin());
+				});
+				
+				examiner << "Input data size: " << pixel_buffer->size() << std::endl;
+				examiner << "Output data size: " << output->size() << std::endl;
 			}
 		},
 		

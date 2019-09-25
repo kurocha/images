@@ -10,10 +10,6 @@
 
 #include "Image.hpp"
 
-extern "C" {
-#include <turbojpeg.h>
-}
-
 namespace Images
 {
 	class JPEGImage : public Image
@@ -33,6 +29,6 @@ namespace Images
 		static Shared<Buffer> save(PixelLayout<PixelFormat::BGR8> layout, const Byte * data, std::uint32_t quality = 75);
 		
 	private:
-		tjhandle _decompressor;
+		void * _decompressor;
 	};
 }

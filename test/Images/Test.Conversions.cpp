@@ -12,7 +12,7 @@
 
 namespace Images
 {
-	using namespace Euclid::Numerics;
+	using namespace Numerics;
 	
 	UnitTest::Suite ConversionsTestSuite {
 		"Images::Conversions",
@@ -26,7 +26,7 @@ namespace Images
 					auto g = Conversions::convert_srgb_to_linear(number(f));
 					auto h = Conversions::convert_linear_to_srgb(number(g));
 					
-					examiner << "Round trip conversion of sRGB curve.";
+					examiner << "Round trip conversion of sRGB curve." << std::endl;
 					examiner.check(f.equivalent(h));
 				}
 			}

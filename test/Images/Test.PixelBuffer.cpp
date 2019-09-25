@@ -4,9 +4,13 @@
 #include <Images/PixelBuffer.hpp>
 #include <Images/PNGImage.hpp>
 #include <Images/WebPImage.hpp>
-#include <Euclid/Numerics/Vector.IO.hpp>
 
 #include <cstring>
+
+#include <Resources/FileData.hpp>
+
+#include <Time/Statistics.hpp>
+#include <iostream>
 
 namespace Images
 {

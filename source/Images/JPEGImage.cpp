@@ -11,6 +11,10 @@
 #include <Buffers/ForeignBuffer.hpp>
 #include <Resources/BufferedData.hpp>
 
+extern "C" {
+#include <turbojpeg.h>
+}
+
 namespace Images
 {
 	JPEGImage::JPEGImage(Data * data) : Image(data)
@@ -20,7 +24,7 @@ namespace Images
 		int jpegSubsamp, width, height, jpegColorspace;
 		
 		tjDecompressHeader3(
-			_decompressor,
+			(tjhandle)_decompressor,
 			data->begin(),
 			data->size(),
 			&width, &height,
@@ -33,13 +37,13 @@ namespace Images
 	
 	JPEGImage::~JPEGImage()
 	{
-		tjDestroy(_decompressor);
+		tjDestroy((tjhandle)_decompressor);
 	}
 	
 	void JPEGImage::load(const PixelLayout<PixelFormat::RGBA8> & layout, Byte * data) const
 	{
 		tjDecompress2(
-			_decompressor,
+			(tjhandle)_decompressor,
 			_data->begin(),
 			_data->size(),
 			data,
@@ -51,7 +55,7 @@ namespace Images
 	void JPEGImage::load(const PixelLayout<PixelFormat::BGRA8> & layout, Byte * data) const
 	{
 		tjDecompress2(
-			_decompressor,
+			(tjhandle)_decompressor,
 			_data->begin(),
 			_data->size(),
 			data,
@@ -63,7 +67,7 @@ namespace Images
 	void JPEGImage::load(const PixelLayout<PixelFormat::RGB8> & layout, Byte * data) const
 	{
 		tjDecompress2(
-			_decompressor,
+			(tjhandle)_decompressor,
 			_data->begin(),
 			_data->size(),
 			data,
@@ -75,7 +79,7 @@ namespace Images
 	void JPEGImage::load(const PixelLayout<PixelFormat::BGR8> & layout, Byte * data) const
 	{
 		tjDecompress2(
-			_decompressor,
+			(tjhandle)_decompressor,
 			_data->begin(),
 			_data->size(),
 			data,
@@ -102,7 +106,7 @@ namespace Images
 			return nullptr;
 		}
 	}
-
+	
 	Shared<Buffer> JPEGImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * input, std::uint32_t quality)
 	{
 		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);

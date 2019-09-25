@@ -14,7 +14,7 @@
 #include <Resources/BufferedData.hpp>
 #include <Resources/ChainLoader.hpp>
 
-#include <Euclid/Numerics/Vector.IO.hpp>
+#include <Numerics/Vector.hpp>
 
 namespace Images
 {
@@ -22,7 +22,11 @@ namespace Images
 	using namespace Memory;
 	using namespace Buffers;
 	
-	using namespace Euclid::Numerics;
+	using namespace Numerics;
+	
+	constexpr std::size_t WIDTH = 0;
+	constexpr std::size_t HEIGHT = 1;
+	constexpr std::size_t DEPTH = 2;
 	
 	class Image : public Object
 	{

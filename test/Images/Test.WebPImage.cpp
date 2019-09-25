@@ -11,6 +11,8 @@
 #include <Images/WebPImage.hpp>
 #include <Resources/FileData.hpp>
 
+#include "Benchmark.hpp"
+
 namespace Images
 {
 	UnitTest::Suite WebPImageTestSuite {
@@ -22,7 +24,43 @@ namespace Images
 				auto image = owned<WebPImage>(data);
 				
 				examiner << "Width and size should be loaded correctly" << std::endl;
-				examiner.expect(image->size()) == Vec3u{320, 241, 1};
+				examiner.expect(image->size()) == Image::Size{320, 241, 1};
+			}
+		},
+		
+		{"can load bacon efficiently",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.webp");
+				
+				examiner << "File size: " << data->size() << std::endl;
+				
+				measure(examiner, "WebP load", [&]{
+					auto image = owned<WebPImage>(data);
+					
+					PixelLayout2D pixel_layout{image->size()};
+					auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+					image->load(pixel_layout, pixel_buffer->begin());
+				});
+			}
+		},
+		
+		{"can save bacon efficiently",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.webp");
+				
+				auto image = owned<WebPImage>(data);
+				
+				PixelLayout2D pixel_layout{image->size()};
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+				image->load(pixel_layout, pixel_buffer->begin());
+				
+				Shared<Buffers::Buffer> output;
+				
+				measure(examiner, "WebPImage::save", [&]{
+					output = WebPImage::save(pixel_layout, pixel_buffer->begin());
+				});
+				
+				examiner << "Output data size: " << output->size() << std::endl;
 			}
 		},
 		

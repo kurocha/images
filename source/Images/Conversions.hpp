@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <Euclid/Numerics/Vector.hpp>
+#include <Numerics/Vector.hpp>
 
 #include "PixelFormat.hpp"
 
@@ -16,7 +16,7 @@ namespace Images
 {
 	namespace Conversions
 	{
-		using namespace Euclid::Numerics;
+		using namespace Numerics;
 		
 		// Taken from http://entropymine.com/imageworsener/srgbformula/
 		template <typename NumericT>

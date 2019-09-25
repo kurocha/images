@@ -11,13 +11,13 @@
 #include "PixelFormat.hpp"
 #include "Conversions.hpp"
 
-#include <Euclid/Numerics/Vector.hpp>
+#include <Numerics/Vector.hpp>
 
 #include <vector>
 
 namespace Images
 {
-	using Euclid::Numerics::Vector;
+	using Numerics::Vector;
 
 	template <std::size_t N>
 	Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, Vector<N, std::size_t> stride) {
@@ -27,7 +27,7 @@ namespace Images
 	// This function computes the stride of a given multi-dimensional array size with a given initial stride.
 	template <std::size_t N, std::size_t M>
 	Vector<N, std::size_t> calculate_stride(const Vector<N, std::size_t> & size, Vector<M, std::size_t> stride) {
-		return calculate_stride(size, stride << (stride[M-1] * size[M]));
+		return calculate_stride(size, stride.append(stride[M-1] * size[M]));
 	}
 	
 	// This function computes the stride of a given multi-dimensional array size with a given initial stride.
@@ -55,7 +55,7 @@ namespace Images
 	/// The layout of pixels in a buffer. Things which affect the actual pixel 
 	template <typename PixelFormatT = PixelFormat::RGBA8, std::size_t N = 2>
 	struct PixelLayout {
-		using Size = Euclid::Numerics::Vector<N, std::size_t>;
+		using Size = Numerics::Vector<N, std::size_t>;
 		using PixelFormat = PixelFormatT;
 		
 		Size size, stride;

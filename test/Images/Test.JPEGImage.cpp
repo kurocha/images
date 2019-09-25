@@ -22,7 +22,7 @@ namespace Images
 				auto image = owned<JPEGImage>(data);
 				
 				examiner << "Width and size should be loaded correctly" << std::endl;
-				examiner.expect(image->size()) == Vec3u{64, 64, 1};
+				examiner.expect(image->size()) == Image::Size{64, 64, 1};
 			}
 		},
 		

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <Euclid/Numerics/Vector.hpp>
+#include <Numerics/Vector.hpp>
 
 #include <Buffers/DynamicBuffer.hpp>
 #include <Memory/Object.hpp>

@@ -3,7 +3,7 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-teapot_version "2.0"
+teapot_version "3.0"
 
 # Project Metadata
 
@@ -23,51 +23,39 @@ end
 # Build Targets
 
 define_target 'images-library' do |target|
-	target.build do
-		source_root = target.package.path + 'source'
-		
-		copy headers: source_root.glob('Images/**/*.{h,hpp}')
-		
-		build static_library: "Images", source_files: source_root.glob('Images/**/*.cpp')
-	end
+	target.depends "Language/C++17"
 	
-	target.depends 'Build/Files'
-	target.depends 'Build/Clang'
+	target.depends "Library/Memory", public: true
+	target.depends "Library/Resources", public: true
 	
-	target.depends :platform
-	target.depends "Language/C++11", private: true
+	target.depends "Library/png", public: true
+	target.depends "Library/jpeg", public: true
+	target.depends "Library/webp", public: true
 	
-	target.depends "Library/Memory"
-	target.depends "Library/Resources"
-	
-	target.depends "Library/png"
-	target.depends "Library/jpeg"
-	target.depends "Library/webp"
-	
-	target.depends "Library/Euclid"
+	target.depends "Library/Numerics", public: true
 	
 	target.provides "Library/Images" do
-		append linkflags [
-			->{install_prefix + 'lib/libImages.a'},
-		]
+		source_root = target.package.path + 'source'
+		
+		library_path = build static_library: "Images", source_files: source_root.glob('Images/**/*.cpp')
+		
+		append linkflags library_path
+		append header_search_paths source_root
 	end
 end
 
 define_target "images-tests" do |target|
-	target.build do |*arguments|
+	target.depends 'Library/UnitTest'
+	target.depends "Language/C++14"
+	
+	target.depends 'Library/Images'
+	target.depends 'Library/Time'
+	
+	target.provides "Test/Images" do |*arguments|
 		test_root = target.package.path + 'test'
 		
-		copy test_assets: test_root.glob('**/fixtures/**/*')
-		
-		run tests: 'Images', source_files: test_root.glob('Images/**/*.cpp'), arguments: arguments
+		run source_files: test_root.glob('Images/**/*.cpp'), arguments: arguments
 	end
-	
-	target.depends "Library/UnitTest"
-	target.depends 'Library/Images'
-	
-	target.depends "Language/C++11", private: true
-	
-	target.provides 'Test/Images'
 end
 
 # Configurations
@@ -87,16 +75,16 @@ define_configuration "development" do |configuration|
 	# Provides some useful C++ generators:
 	configuration.require "generate-cpp-class"
 	
-	configuration.require "platforms"
-	
 	configuration.require "generate-project"
 	configuration.require "generate-travis"
+	
+	configuration.require "time"
 end
 
 define_configuration "images" do |configuration|
 	configuration.public!
 	
-	configuration.require "euclid"
+	configuration.require "numerics"
 	configuration.require "resources"
 	
 	configuration.require "zlib-ng"
