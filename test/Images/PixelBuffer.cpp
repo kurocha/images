@@ -1,3 +1,10 @@
+//
+//  PixelBuffer.cpp
+//  This file is part of the "Images" project and released under the MIT License.
+//
+//  Created by Samuel Williams on 2/5/2016.
+//  Copyright, 2016, by Samuel Williams. All rights reserved.
+//
 
 #include <UnitTest/UnitTest.hpp>
 

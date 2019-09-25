@@ -1,5 +1,5 @@
 //
-//  Test.Transparency.cpp
+//  Transparency.cpp
 //  This file is part of the "Images" project and released under the MIT License.
 //
 //  Created by Samuel Williams on 6/9/2017.

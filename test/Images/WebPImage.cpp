@@ -1,5 +1,5 @@
 //
-//  Test.WebPImage.cpp
+//  WebPImage.cpp
 //  This file is part of the "Images" project and released under the MIT License.
 //
 //  Created by Samuel Williams on 30/1/2017.
