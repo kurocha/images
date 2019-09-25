@@ -8,6 +8,7 @@
 
 #include <UnitTest/UnitTest.hpp>
 
+#include <Images/PNGImage.hpp>
 #include <Images/WebPImage.hpp>
 #include <Resources/FileData.hpp>
 
@@ -44,11 +45,11 @@ namespace Images
 			}
 		},
 		
-		{"can save bacon efficiently",
+		{"can save bacon efficiently (lossless)",
 			[](UnitTest::Examiner & examiner) {
-				auto data = owned<Resources::FileData>("Images/fixtures/bacon.webp");
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.png");
 				
-				auto image = owned<WebPImage>(data);
+				auto image = owned<PNGImage>(data);
 				
 				PixelLayout2D pixel_layout{image->size()};
 				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
@@ -61,6 +62,28 @@ namespace Images
 				});
 				
 				examiner << "Output data size: " << output->size() << std::endl;
+				output->write_to_file("bacon-lossless.webp");
+			}
+		},
+		
+		{"can save bacon efficiently (Q=100)",
+			[](UnitTest::Examiner & examiner) {
+				auto data = owned<Resources::FileData>("Images/fixtures/bacon.png");
+				
+				auto image = owned<PNGImage>(data);
+				
+				PixelLayout2D pixel_layout{image->size()};
+				auto pixel_buffer = owned<PixelBuffer2D>(pixel_layout);
+				image->load(pixel_layout, pixel_buffer->begin());
+				
+				Shared<Buffers::Buffer> output;
+				
+				measure(examiner, "WebPImage::save", [&]{
+					output = WebPImage::save(pixel_layout, pixel_buffer->begin(), 100);
+				});
+				
+				examiner << "Output data size: " << output->size() << std::endl;
+				output->write_to_file("bacon-lossy-q100.webp");
 			}
 		},
 		

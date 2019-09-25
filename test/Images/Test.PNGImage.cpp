@@ -62,6 +62,7 @@ namespace Images
 				
 				examiner << "Input data size: " << pixel_buffer->size() << std::endl;
 				examiner << "Output data size: " << output->size() << std::endl;
+				output->write_to_file("bacon.png");
 			}
 		},
 		
