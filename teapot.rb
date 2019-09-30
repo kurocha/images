@@ -46,7 +46,7 @@ end
 
 define_target "images-tests" do |target|
 	target.depends 'Library/UnitTest'
-	target.depends "Language/C++14"
+	target.depends "Language/C++17"
 	
 	target.depends 'Library/Images'
 	target.depends 'Library/Time'

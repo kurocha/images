@@ -3,6 +3,7 @@
 
 #include <Time/Statistics.hpp>
 #include <iostream>
+#include <string_view>
 
 template <typename Output, typename F>
 void measure(Output & output, std::string_view name, F f) {
