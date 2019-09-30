@@ -2,7 +2,7 @@
 
 Provides image loading, saving and manipulation.
 
-[![Build Status](https://travis-ci.org/kurocha/images.svg?branch=master)](https://travis-ci.org/kurocha/images)
+[![Actions Status](https://github.com/kurocha/images/workflows/Tests/badge.svg)](https://github.com/kurocha/images/actions?workflow=Tests)
 
 ## Setup
 
