@@ -12,6 +12,7 @@
 
 namespace Images
 {
+	// WebP doesn't support associated alpha so this code path is naturally slower as it requires a manual conversion of the pixel buffer.
 	class WebPImage : public Image
 	{
 	public:

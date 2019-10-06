@@ -126,21 +126,18 @@ namespace Images
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::RGBA8> layout, const Byte * data, std::uint32_t quality)
 	{
-//		PixelBuffer<PixelLayout<PixelFormat::UBGRA8>> pixel_buffer(layout);
-//		
-//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
-//		
-//		return this->save<WebPEncodeRGBA>(pixel_buffer.layout(), pixel_buffer.data(), quality);
-		return save(WebPEncodeRGBA, layout, data, quality);
+		PixelLayout<PixelFormat::RGBa8> internal_layout(layout.size, layout.stride);
+		
+		auto input_pixels = pixels(layout, data);
+		PixelBuffer<PixelLayout<PixelFormat::RGBa8>> output_pixels(internal_layout);
+		
+		layout.convert(internal_layout, input_pixels, output_pixels);
+		
+		return save(WebPEncodeRGBA, internal_layout, output_pixels.begin(), quality);
 	}
 	
 	Shared<Buffer> WebPImage::save(PixelLayout<PixelFormat::BGRA8> layout, const Byte * data, std::uint32_t quality)
 	{
-//		PixelBuffer<PixelLayout<PixelFormat::UBGRA8>> pixel_buffer(layout);
-//		
-//		layout->load(pixel_buffer.layout(), data, pixel_buffer.data());
-//		
-//		return this->save<WebPEncodeBGRA>(pixel_buffer.layout(), pixel_buffer.data(), quality);
 		return save(WebPEncodeBGRA, layout, data, quality);
 	}
 	
