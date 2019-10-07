@@ -37,7 +37,10 @@ namespace Images
 			}
 		}
 		
+		// Convert from unassociated alpha to associated alpha (pre-multiplied).
 		void convert(const PixelFormat::RGBa8 & input, PixelFormat::RGBA8 & output);
+		
+		// Convert from associated alpha (pre-multiplied) to unassociated alpha.
 		void convert(const PixelFormat::RGBA8 & input, PixelFormat::RGBa8 & output);
 	}
 }
