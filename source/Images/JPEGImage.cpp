@@ -32,7 +32,7 @@ namespace Images
 			&jpegColorspace
 		);
 		
-		_size = {width, height, 1};
+		_size = {static_cast<std::size_t>(width), static_cast<std::size_t>(height), 1};
 	}
 	
 	JPEGImage::~JPEGImage()
